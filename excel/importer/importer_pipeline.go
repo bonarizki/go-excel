@@ -41,6 +41,7 @@ func (i *BasicImporter) prepareImport(ctx context.Context) (context.Context, con
 // share every step from here on, including struct mapping in
 // ImportToStructs.
 func (i *BasicImporter) importStringRows(ctx context.Context, sheetRows [][]string) error {
+	i.resetRunState()
 	if len(sheetRows) == 0 {
 		return excel.ErrEmptyData
 	}

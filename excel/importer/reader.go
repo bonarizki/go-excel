@@ -16,7 +16,6 @@ import (
 // anything else (including no extension) reads XLSX via excelize.
 // Returns error if file cannot be opened or import fails.
 func (i *BasicImporter) ImportFromFile(ctx context.Context, filename string) error {
-	i.beginImport()
 	if filename == "" {
 		return excel.NewImportError("ImportFromFile", i.config.SheetName, 0, 0,
 			fmt.Errorf("filename cannot be empty"))
@@ -92,8 +91,7 @@ func (i *BasicImporter) importXLSXFile(ctx context.Context, filename string) err
 		return excel.NewImportError("OpenFile", i.config.SheetName, 0, 0, err)
 	}
 
-	i.file = file
-	i.shouldCloseFile = true
+	i.setFile(file, true)
 	i.format = excel.FileFormatXLSX
 
 	if err := i.Import(ctx); err != nil {
