@@ -721,7 +721,7 @@ func BenchmarkCriticalFunction(b *testing.B) {
 ### Go Modules
 ```go
 // go.mod
-module github.com/bonarizki-dat/go-excel
+module github.com/bonarizki/go-excel
 
 go 1.26
 
@@ -805,7 +805,7 @@ import (
     "context"
     "testing"
 
-    "github.com/bonarizki-dat/go-excel/excel"
+    "github.com/bonarizki/go-excel/excel"
 )
 
 func genRows(n int) [][]any {

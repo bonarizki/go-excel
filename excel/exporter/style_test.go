@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

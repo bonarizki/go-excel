@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 // TestPrepareImport_BeforeImportHookError verifies a BeforeImport hook

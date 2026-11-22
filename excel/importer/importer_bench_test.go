@@ -11,7 +11,7 @@ import (
 	// excelize is the underlying Excel engine used to generate synthetic files.
 	"github.com/xuri/excelize/v2"
 	// excel provides functional options used by importer.
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 // makeExcelBuffer builds an Excel file with a header and rows, returning bytes for ImportFromReader.

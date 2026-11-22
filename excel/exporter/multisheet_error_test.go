@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 // TestExportToSheets_InitWorkbookFailure verifies a sheet name excelize

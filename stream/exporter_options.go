@@ -3,8 +3,8 @@ package stream
 import (
 	"context"
 
-	"github.com/bonarizki-dat/go-excel/excel"
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 // Functional options and callback types for StreamExporter.

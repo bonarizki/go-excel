@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 // Row-write loop for BasicExporter: events, progress, and StopOnError

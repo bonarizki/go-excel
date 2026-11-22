@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 // TestExportToSheets_StylesApplyToEveryXLSXSheet verifies that

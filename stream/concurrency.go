@@ -1,6 +1,6 @@
 package stream
 
-import "github.com/bonarizki-dat/go-excel/internal/concurrency"
+import "github.com/bonarizki/go-excel/internal/concurrency"
 
 // WorkerStats is a type alias for the worker pool's statistics type.
 // It stays exported here — the only one of its former neighbors that

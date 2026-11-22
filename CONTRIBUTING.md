@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for considering a contribution to `github.com/bonarizki-dat/go-excel`.
+Thanks for considering a contribution to `github.com/bonarizki/go-excel`.
 
 This project is pre-1.0 (`v0.x`), so breaking changes are sometimes acceptable
 when they fix a genuine design problem — but they still need a clear
@@ -23,7 +23,7 @@ migration note in [CHANGELOG.md](CHANGELOG.md).
 Requires Go 1.26 or later (see [go.mod](go.mod)).
 
 ```bash
-git clone https://github.com/bonarizki-dat/go-excel.git
+git clone https://github.com/bonarizki/go-excel.git
 cd go-excel
 make install   # go mod download && go mod tidy
 ```

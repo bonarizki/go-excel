@@ -1,7 +1,7 @@
 package stream
 
 import (
-	"github.com/bonarizki-dat/go-excel/excel/csvio"
+	"github.com/bonarizki/go-excel/excel/csvio"
 	"github.com/xuri/excelize/v2"
 )
 

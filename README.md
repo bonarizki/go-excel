@@ -2,7 +2,7 @@
 
 > Excel import/export library for Go, inspired by Laravel's Maatwebsite/Excel
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/bonarizki-dat/go-excel.svg)](https://pkg.go.dev/github.com/bonarizki-dat/go-excel)
+[![Go Reference](https://pkg.go.dev/badge/github.com/bonarizki/go-excel.svg)](https://pkg.go.dev/github.com/bonarizki/go-excel)
 [![Go Version](https://img.shields.io/badge/Go-1.26%2B-blue)](https://golang.org/dl/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-v0.3.0-green.svg)](CHANGELOG.md)
@@ -65,7 +65,7 @@ This is a pre-1.0 (`v0.x`) library. Breaking changes are still possible between 
 ## 🚀 Installation
 
 ```bash
-go get github.com/bonarizki-dat/go-excel
+go get github.com/bonarizki/go-excel
 ```
 
 ## 🚀 Quick Start
@@ -82,8 +82,8 @@ import (
     "fmt"
     "log"
     
-    "github.com/bonarizki-dat/go-excel/excel"
-    "github.com/bonarizki-dat/go-excel/excel/exporter"
+    "github.com/bonarizki/go-excel/excel"
+    "github.com/bonarizki/go-excel/excel/exporter"
 )
 
 func main() {
@@ -124,8 +124,8 @@ go run main.go
 ```go
 import (
     "github.com/gin-gonic/gin"
-    "github.com/bonarizki-dat/go-excel/excel"
-    "github.com/bonarizki-dat/go-excel/excel/exporter"
+    "github.com/bonarizki/go-excel/excel"
+    "github.com/bonarizki/go-excel/excel/exporter"
 )
 
 func exportHandlerGin(c *gin.Context) {
@@ -158,8 +158,8 @@ func exportHandlerGin(c *gin.Context) {
 ```go
 import (
     "net/http"
-    "github.com/bonarizki-dat/go-excel/excel"
-    "github.com/bonarizki-dat/go-excel/excel/exporter"
+    "github.com/bonarizki/go-excel/excel"
+    "github.com/bonarizki/go-excel/excel/exporter"
 )
 
 func exportHandler(w http.ResponseWriter, r *http.Request) {
@@ -205,8 +205,8 @@ import (
     "fmt"
     "log"
     
-    "github.com/bonarizki-dat/go-excel/excel"
-    "github.com/bonarizki-dat/go-excel/excel/importer"
+    "github.com/bonarizki/go-excel/excel"
+    "github.com/bonarizki/go-excel/excel/importer"
 )
 
 func main() {
@@ -353,7 +353,7 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and release notes.
 
 ## 🐛 Issues & Support
 
-- **GitHub Issues**: [Report issues](https://github.com/bonarizki-dat/go-excel/issues)
+- **GitHub Issues**: [Report issues](https://github.com/bonarizki/go-excel/issues)
 - **Security vulnerabilities**: Do not open a public issue — see [SECURITY.md](SECURITY.md) for private reporting instructions
 - **Documentation**: See [docs/](docs/) directory
 - **Examples**: See [examples/](examples/) directory

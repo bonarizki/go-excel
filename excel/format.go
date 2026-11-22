@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 // FileFormat identifies the on-disk document format. See

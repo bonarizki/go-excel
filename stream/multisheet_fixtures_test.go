@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/internal/concurrency"
+	"github.com/bonarizki/go-excel/internal/concurrency"
 	"github.com/xuri/excelize/v2"
 )
 

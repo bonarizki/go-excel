@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 // TestExporter_Timeout_SetsContextDeadline verifies that WithTimeout wraps

@@ -7,9 +7,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/bonarizki-dat/go-excel/excel"
-	"github.com/bonarizki-dat/go-excel/excel/config"
-	"github.com/bonarizki-dat/go-excel/internal/events"
+	"github.com/bonarizki/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/internal/events"
 	"github.com/xuri/excelize/v2"
 )
 

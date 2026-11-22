@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bonarizki-dat/go-excel/excel/config"
-	"github.com/bonarizki-dat/go-excel/internal/concurrency"
+	"github.com/bonarizki/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/internal/concurrency"
 )
 
 // TestExportStream_MaxInFlightFloor verifies ExportStream clamps

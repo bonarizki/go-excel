@@ -6,7 +6,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/bonarizki-dat/go-excel/internal/concurrency"
+	"github.com/bonarizki/go-excel/internal/concurrency"
 )
 
 // ImportStream orchestration. Options and read helpers stay in their own files.

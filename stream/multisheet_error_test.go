@@ -6,8 +6,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 // TestExportToSheets_NoSheetsError verifies an empty sheets slice with

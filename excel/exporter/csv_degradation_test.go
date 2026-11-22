@@ -7,7 +7,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 // degradationLogger records Warn calls so tests can assert a feature was

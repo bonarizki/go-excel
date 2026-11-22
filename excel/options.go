@@ -3,7 +3,7 @@ package excel
 import (
 	"time"
 
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 // Option is a function that modifies a Config

@@ -1,4 +1,4 @@
-module github.com/bonarizki-dat/go-excel
+module github.com/bonarizki/go-excel
 
 // Minimum supported Go toolchain version. This is a deliberate
 // requirement, not a claim that the library depends on 1.26 language

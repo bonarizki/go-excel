@@ -28,11 +28,11 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
-	"github.com/bonarizki-dat/go-excel/excel/config"
-	"github.com/bonarizki-dat/go-excel/excel/exporter"
-	"github.com/bonarizki-dat/go-excel/excel/importer"
-	"github.com/bonarizki-dat/go-excel/stream"
+	"github.com/bonarizki/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/exporter"
+	"github.com/bonarizki/go-excel/excel/importer"
+	"github.com/bonarizki/go-excel/stream"
 	"github.com/xuri/excelize/v2"
 )
 

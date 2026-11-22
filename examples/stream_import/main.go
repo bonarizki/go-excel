@@ -11,7 +11,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/bonarizki-dat/go-excel/stream"
+	"github.com/bonarizki/go-excel/stream"
 )
 
 func main() {

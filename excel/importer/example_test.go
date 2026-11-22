@@ -6,9 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/bonarizki-dat/go-excel/excel"
-	"github.com/bonarizki-dat/go-excel/excel/exporter"
-	"github.com/bonarizki-dat/go-excel/excel/importer"
+	"github.com/bonarizki/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel/exporter"
+	"github.com/bonarizki/go-excel/excel/importer"
 )
 
 // Example_basicImport reads rows and headings back from an xlsx file

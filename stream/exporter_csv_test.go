@@ -6,7 +6,7 @@ import (
 	"encoding/csv"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 // readBackCSV decodes buf as CSV, stripping a leading UTF-8 BOM if

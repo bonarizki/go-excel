@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 // TestImportCSVFromReader_PrepareImportError verifies a prepareImport

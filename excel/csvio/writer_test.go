@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 func TestWriter_UseBOM_ControlsBOMPresence(t *testing.T) {

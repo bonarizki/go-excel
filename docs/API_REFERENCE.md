@@ -616,7 +616,7 @@ Registers a hook for a specific event type.
 #### DefaultConfig
 
 ```go
-package config // github.com/bonarizki-dat/go-excel/excel/config
+package config // github.com/bonarizki/go-excel/excel/config
 
 func DefaultConfig() *Config
 ```

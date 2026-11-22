@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Only the latest tagged release of `github.com/bonarizki-dat/go-excel` receives
+Only the latest tagged release of `github.com/bonarizki/go-excel` receives
 security fixes. This project is pre-1.0 (`v0.x`), so no long-term support
 branches are maintained.
 

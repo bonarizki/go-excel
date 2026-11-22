@@ -6,7 +6,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/bonarizki-dat/go-excel/internal/concurrency"
+	"github.com/bonarizki/go-excel/internal/concurrency"
 )
 
 // stopGracePeriod is how long the pipeline may sit completely idle

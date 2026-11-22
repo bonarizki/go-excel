@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"sync/atomic"
 
-	"github.com/bonarizki-dat/go-excel/excel/config"
-	"github.com/bonarizki-dat/go-excel/internal/concurrency"
+	"github.com/bonarizki/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/internal/concurrency"
 )
 
 // processRow is the ProcessFunc run concurrently across the worker

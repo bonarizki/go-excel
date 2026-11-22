@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 // TestExportError_Error tests excel.ExportError error message formatting.

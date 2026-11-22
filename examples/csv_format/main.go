@@ -8,9 +8,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/bonarizki-dat/go-excel/excel"
-	"github.com/bonarizki-dat/go-excel/excel/exporter"
-	"github.com/bonarizki-dat/go-excel/excel/importer"
+	"github.com/bonarizki/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel/exporter"
+	"github.com/bonarizki/go-excel/excel/importer"
 )
 
 // consoleLogger prints Warn calls so the CSV degradation notices below are

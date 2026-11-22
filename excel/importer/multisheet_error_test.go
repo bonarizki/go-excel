@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 // TestImportFromSheet_EmptyFilename verifies an empty filename is

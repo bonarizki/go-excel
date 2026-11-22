@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 // TestExporter_PrepareData_2DArray tests prepareData with [][]interface{}.

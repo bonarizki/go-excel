@@ -6,7 +6,7 @@ import (
 	"io"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 // failCloseSink is an excel.RowSink whose Close always fails, used to

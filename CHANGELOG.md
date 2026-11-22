@@ -215,7 +215,7 @@ into `testdata/corpus/`, not on coverage or time alone.
   outside its own tests. Recorded here rather than as a GitHub issue
   because `gh` was unavailable in the environment that did this pass.
 - **Public git history was rewritten for this release.** `main` on
-  `bonarizki-dat/go-excel` was replaced with a single orphan commit
+  `bonarizki/go-excel` was replaced with a single orphan commit
   containing this tree (no parent), pushed with `--force`; the `v0.1.0`
   and `v0.2.0` tags were deleted from both the local clone and the
   remote. This was a deliberate one-time reset at the end of the harden
@@ -233,7 +233,7 @@ into `testdata/corpus/`, not on coverage or time alone.
   - Any GitHub Issues or Pull Requests that reference a pre-rewrite
     commit SHA are now orphaned (the SHA they link to no longer
     resolves on this repository). The repository name and module import
-    path (`github.com/bonarizki-dat/go-excel`) are unchanged.
+    path (`github.com/bonarizki/go-excel`) are unchanged.
 
 ## [0.2.0] - 2026-08-22
 
@@ -833,7 +833,7 @@ than in two places that could drift apart.
 Development-log marker for the initial repository setup and architecture
 design. No `v0.0.0` tag exists in git.
 
-[Unreleased]: https://github.com/bonarizki-dat/go-excel/compare/v0.3.0...HEAD
-[0.3.0]: https://github.com/bonarizki-dat/go-excel/compare/v0.2.0...v0.3.0
-[0.2.0]: https://github.com/bonarizki-dat/go-excel/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/bonarizki-dat/go-excel/releases/tag/v0.1.0
+[Unreleased]: https://github.com/bonarizki/go-excel/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/bonarizki/go-excel/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/bonarizki/go-excel/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/bonarizki/go-excel/releases/tag/v0.1.0

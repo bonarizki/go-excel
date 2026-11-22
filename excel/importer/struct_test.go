@@ -12,7 +12,7 @@ import (
 
 	"github.com/xuri/excelize/v2"
 
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 type TestUser struct {

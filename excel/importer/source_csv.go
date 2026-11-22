@@ -4,8 +4,8 @@ import (
 	"context"
 	"io"
 
-	"github.com/bonarizki-dat/go-excel/excel"
-	"github.com/bonarizki-dat/go-excel/excel/csvio"
+	"github.com/bonarizki/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel/csvio"
 )
 
 // importCSVFromReader decodes r as CSV and runs the result through

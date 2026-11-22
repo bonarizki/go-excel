@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 func writeCSVFile(t *testing.T, contents string) string {

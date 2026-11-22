@@ -4,7 +4,7 @@ import (
 	"context"
 	"io"
 
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 // RowSink receives prepared rows and produces a document in a specific

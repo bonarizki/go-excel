@@ -5,7 +5,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/bonarizki-dat/go-excel/stream"
+	"github.com/bonarizki/go-excel/stream"
 )
 
 // Example_streamExport writes rows to an xlsx file through a channel,

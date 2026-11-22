@@ -15,7 +15,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 // EventDispatcher manages event listeners and dispatches events.

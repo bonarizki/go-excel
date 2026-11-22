@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 // TestExportToSheets_ChannelAndStaticData verifies that ExportToSheets

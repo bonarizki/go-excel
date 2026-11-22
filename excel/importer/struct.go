@@ -4,7 +4,7 @@ import (
 	"context"
 	"reflect"
 
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 // ImportToStructs imports data from an Excel file into a slice of structs.

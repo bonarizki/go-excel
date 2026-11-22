@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
-	"github.com/bonarizki-dat/go-excel/excel/exporter"
+	"github.com/bonarizki/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel/exporter"
 )
 
 // MockExportable is a mock implementation of excel.Exportable interface.

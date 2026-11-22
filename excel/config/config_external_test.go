@@ -3,7 +3,7 @@ package config_test
 import (
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 // TestDefaultConfig verifies that config.DefaultConfig returns correct default values

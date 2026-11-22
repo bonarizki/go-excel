@@ -3,7 +3,7 @@ package excel
 import (
 	"fmt"
 
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 // ExportError represents an error that occurred during export operations

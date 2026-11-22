@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 // TestConfigClone verifies that Clone creates an independent copy

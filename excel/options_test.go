@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	// config holds the Config type modified by options.
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 // TestOptionsModifyConfig verifies functional options correctly mutate Config fields.

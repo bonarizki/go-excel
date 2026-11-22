@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 func TestEventDispatcher_On_Dispatch(t *testing.T) {

@@ -5,8 +5,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
-	"github.com/bonarizki-dat/go-excel/excel/exporter"
+	"github.com/bonarizki/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel/exporter"
 )
 
 // TestExporter_Export_DefaultSheet tests default sheet handling.

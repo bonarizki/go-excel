@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bonarizki-dat/go-excel/excel"
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 // stubLogger and stubMetric are minimal config.Logger/config.Metric

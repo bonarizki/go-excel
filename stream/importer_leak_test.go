@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 // TestImportStream_ProcessorErrorDoesNotLeakReaderGoroutine is a

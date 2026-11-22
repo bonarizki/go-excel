@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
-	"github.com/bonarizki-dat/go-excel/excel/exporter"
+	"github.com/bonarizki/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel/exporter"
 )
 
 // TestExporter_Close tests the Close method.

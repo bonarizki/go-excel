@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	// excel provides functional options used by exporter.
-	"github.com/bonarizki-dat/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel"
 )
 
 // genRows generates a synthetic dataset with a header to simulate real-world tables.

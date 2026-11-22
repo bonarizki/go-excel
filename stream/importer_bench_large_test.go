@@ -7,7 +7,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/config"
 	"github.com/xuri/excelize/v2"
 )
 

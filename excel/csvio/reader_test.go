@@ -6,7 +6,7 @@ import (
 	"io"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 func TestNewReader_StripsLeadingBOM(t *testing.T) {

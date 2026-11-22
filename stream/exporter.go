@@ -6,10 +6,10 @@ import (
 	"runtime"
 	"sync"
 
-	"github.com/bonarizki-dat/go-excel/excel"
-	"github.com/bonarizki-dat/go-excel/excel/config"
-	"github.com/bonarizki-dat/go-excel/excel/csvio"
-	"github.com/bonarizki-dat/go-excel/internal/concurrency"
+	"github.com/bonarizki/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/csvio"
+	"github.com/bonarizki/go-excel/internal/concurrency"
 	"github.com/xuri/excelize/v2"
 )
 

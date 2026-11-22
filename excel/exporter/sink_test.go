@@ -6,9 +6,9 @@ import (
 	"io"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel"
-	"github.com/bonarizki-dat/go-excel/excel/config"
-	"github.com/bonarizki-dat/go-excel/excel/csvio"
+	"github.com/bonarizki/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/csvio"
 )
 
 // failWriter is an io.Writer that always errors, used to force Flush and

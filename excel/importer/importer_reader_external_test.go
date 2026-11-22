@@ -8,8 +8,8 @@ import (
 
 	"github.com/xuri/excelize/v2"
 
-	"github.com/bonarizki-dat/go-excel/excel"
-	"github.com/bonarizki-dat/go-excel/excel/importer"
+	"github.com/bonarizki/go-excel/excel"
+	"github.com/bonarizki/go-excel/excel/importer"
 )
 
 // TestImporter_ImportFromReader_Success tests successful reader import.

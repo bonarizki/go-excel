@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 // TestConfigValidate_Invalid tests validation with invalid configurations

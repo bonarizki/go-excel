@@ -6,7 +6,7 @@ import (
 	"encoding/csv"
 	"io"
 
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 // Reader decodes CSV records one at a time. It exists alongside ReadAll

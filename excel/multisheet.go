@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/bonarizki-dat/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/excel/config"
 )
 
 // Sheet represents a single worksheet in an Excel file.

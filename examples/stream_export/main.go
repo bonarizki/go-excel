@@ -13,7 +13,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/bonarizki-dat/go-excel/stream"
+	"github.com/bonarizki/go-excel/stream"
 )
 
 const rowCount = 50_000
