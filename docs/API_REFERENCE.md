@@ -1,6 +1,6 @@
 # API Reference - Go Excel Library
 
-> Complete API documentation for go-lib-matwebsite
+> Complete API documentation for go-excel (`github.com/bonarizki/go-excel`)
 
 **Covers**: `v0.3.0` (see [CHANGELOG.md](../CHANGELOG.md))
 **Last audited against real signatures**: 2026-08-23

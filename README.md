@@ -54,13 +54,13 @@ go test -bench 'BenchmarkStream(Exporter|Importer)(1M|MaxSheet)$' -benchmem -ben
 
 ## 🚫 When Not to Use This Library
 
-This is a pre-1.0 (`v0.x`) library. Breaking changes are still possible between minor versions (see [CHANGELOG.md](CHANGELOG.md)), and the API surface is not yet frozen. Concretely, avoid it if:
+This is a pre-1.0 (`v0.x`) library. As of **v0.3.0**, further public renames/removals are not planned before `1.0` (see [CHANGELOG.md](CHANGELOG.md)), but `1.0` itself still waits on soak/usage feedback. Avoid it if:
 
-- **You need proven behavior on unpredictable, human-produced files.** This library's test suite is built from clean, programmatically generated fixtures; it has not yet been soaked against a corpus of real-world spreadsheets with merged cells, inconsistent headers, mixed date/number formatting, or unusual sheet names in production.
+- **You need proven behavior on unpredictable, human-produced files.** This library's test suite is built from clean, programmatically generated fixtures plus a small dirty-file corpus; it has not yet been soaked against a broad set of real-world spreadsheets in production.
 - **You are expecting "streaming" to mean bounded/constant memory.** The `stream` package is row-at-a-time processing so caller code never holds every row in a `[][]any` at once, but peak process memory is still dominated by excelize internally (~98%, see [PERFORMANCE_GUIDE.md](docs/PERFORMANCE_GUIDE.md#understanding-memory-usage)) and still scales with dataset size. If your goal is O(1) memory regardless of file size, this library does not provide that for either XLSX export or import.
 - **You need charts, drawings, formula evaluation, or `.xls` (the legacy binary format).** None of these are implemented; see [docs/FEATURE_CHECKLIST.md](docs/FEATURE_CHECKLIST.md) Part 2 for what is intentionally out of scope.
 - **Your toolchain is below Go 1.26.** `go.mod` pins `go 1.26` as a hard minimum; this is a deliberate toolchain requirement, not a claim that the library needs 1.26 language features for performance.
-- **You need a stable, frozen API today.** Functional options and even constructor signatures have been renamed across recent releases (see the Breaking Changes sections in [CHANGELOG.md](CHANGELOG.md)). Pin an exact version and read the changelog before upgrading.
+- **You cannot pin versions.** Pin an exact tag (e.g. `v0.3.0`) and read the changelog before upgrading — pre-`1.0` still allows bugfix that change behavior.
 
 ## 🚀 Installation
 
