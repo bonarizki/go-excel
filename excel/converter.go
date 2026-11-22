@@ -2,6 +2,7 @@ package excel
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 	"time"
@@ -35,11 +36,16 @@ func convertToInt(value string) (int64, error) {
 	if value == "" {
 		return 0, nil
 	}
-	// Handle float-like strings (e.g. "123.00") by parsing as float first
-	if strings.Contains(value, ".") {
+	if strings.ContainsAny(value, ".eE") {
 		f, err := strconv.ParseFloat(value, 64)
 		if err != nil {
 			return 0, err
+		}
+		if f != math.Trunc(f) {
+			return 0, fmt.Errorf("%w: fractional value %q cannot convert to int", ErrTypeMismatch, value)
+		}
+		if f < float64(math.MinInt64) || f > float64(math.MaxInt64) {
+			return 0, fmt.Errorf("%w: integer overflow for %q", ErrTypeMismatch, value)
 		}
 		return int64(f), nil
 	}
@@ -51,13 +57,16 @@ func convertToUint(value string) (uint64, error) {
 	if value == "" {
 		return 0, nil
 	}
-	if strings.Contains(value, ".") {
+	if strings.ContainsAny(value, ".eE") {
 		f, err := strconv.ParseFloat(value, 64)
 		if err != nil {
 			return 0, err
 		}
 		if f < 0 {
 			return 0, fmt.Errorf("%w: cannot convert negative value to uint", ErrTypeMismatch)
+		}
+		if f != math.Trunc(f) {
+			return 0, fmt.Errorf("%w: fractional value %q cannot convert to uint", ErrTypeMismatch, value)
 		}
 		return uint64(f), nil
 	}
@@ -69,10 +78,7 @@ func convertToFloat(value string) (float64, error) {
 	if value == "" {
 		return 0.0, nil
 	}
-	// Handle currency symbols or commas if simple
-	clean := strings.ReplaceAll(value, ",", "")
-	clean = strings.ReplaceAll(clean, "$", "")
-	return strconv.ParseFloat(clean, 64)
+	return strconv.ParseFloat(value, 64)
 }
 
 // convertToBool converts a string to a boolean.
