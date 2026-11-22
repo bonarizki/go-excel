@@ -23,7 +23,7 @@ type invoiceRow struct {
 func TestExportToSheets_StructRowsWithHeaderStyle(t *testing.T) {
 	data := []invoiceRow{{ID: 1, Amount: 10.5}, {ID: 2, Amount: 20.25}}
 
-	rows, err := NewExporter(data).prepareData(context.Background())
+	rows, err := NewExporter(data, excel.WithHeadings(false)).prepareData(context.Background())
 	if err != nil {
 		t.Fatalf("prepareData: %v", err)
 	}

@@ -70,7 +70,7 @@ func TestExporter_PrepareData_BareStruct(t *testing.T) {
 	}
 	data := PlainStruct{Field: "test"}
 
-	exporter := NewExporter(data)
+	exporter := NewExporter(data, excel.WithHeadings(false))
 	rows, err := exporter.prepareData(ctx)
 	if err != nil {
 		t.Fatalf("prepareData failed: %v", err)
@@ -101,7 +101,7 @@ func TestExporter_ReflectStructToRow_OmitEmpty(t *testing.T) {
 		{Name: "zero values", Notes: "", Count: 0},
 	}
 
-	exporter := NewExporter(data)
+	exporter := NewExporter(data, excel.WithHeadings(false))
 	rows, err := exporter.prepareData(ctx)
 	if err != nil {
 		t.Fatalf("prepareData failed: %v", err)
@@ -139,7 +139,7 @@ func TestExporter_ReflectStructToRow_EmbeddedValueStruct(t *testing.T) {
 		Name string `excel:"name"`
 	}
 
-	exporter := NewExporter([]Item{{Base: Base{ID: 1}, Name: "Alice"}})
+	exporter := NewExporter([]Item{{Base: Base{ID: 1}, Name: "Alice"}}, excel.WithHeadings(false))
 	rows, err := exporter.prepareData(ctx)
 	if err != nil {
 		t.Fatalf("prepareData failed: %v", err)
@@ -167,7 +167,7 @@ func TestExporter_ReflectStructToRow_EmbeddedPointerStruct(t *testing.T) {
 		Name string `excel:"name"`
 	}
 
-	exporter := NewExporter([]Item{{Base: &Base{ID: 2}, Name: "Bob"}})
+	exporter := NewExporter([]Item{{Base: &Base{ID: 2}, Name: "Bob"}}, excel.WithHeadings(false))
 	rows, err := exporter.prepareData(ctx)
 	if err != nil {
 		t.Fatalf("prepareData failed: %v", err)
