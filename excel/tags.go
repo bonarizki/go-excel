@@ -3,6 +3,7 @@ package excel
 import (
 	"fmt"
 	"reflect"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -107,7 +108,7 @@ func GetFieldTags(t reflect.Type) ([]TagOptions, error) {
 	}
 
 	if cached, ok := tagCache.Load(t); ok {
-		return cached.([]TagOptions), nil
+		return slices.Clone(cached.([]TagOptions)), nil
 	}
 
 	tags, err := collectFieldTags(t, nil, 0)
@@ -116,7 +117,7 @@ func GetFieldTags(t reflect.Type) ([]TagOptions, error) {
 	}
 
 	tagCache.Store(t, tags)
-	return tags, nil
+	return slices.Clone(tags), nil
 }
 
 // collectFieldTags walks t's exported fields and returns their parsed
