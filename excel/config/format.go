@@ -69,11 +69,11 @@ type CSVOptions struct {
 // unambiguously.
 func DefaultCSVOptions() CSVOptions {
 	return CSVOptions{
-		Delimiter:        ',',
-		UseBOM:           true,
-		LineEnding:       "\r\n",
-		TimeLayout:       "2006-01-02 15:04:05",
-		EscapeFormulas:   true,
+		Delimiter:      ',',
+		UseBOM:         true,
+		LineEnding:     "\r\n",
+		TimeLayout:     "2006-01-02 15:04:05",
+		EscapeFormulas: true,
 	}
 }
 

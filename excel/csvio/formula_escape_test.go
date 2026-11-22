@@ -4,10 +4,10 @@ import "testing"
 
 func TestFormatValue_FormulaEscape(t *testing.T) {
 	tests := []struct {
-		name    string
-		value   any
-		escape  bool
-		want    string
+		name   string
+		value  any
+		escape bool
+		want   string
 	}{
 		{name: "formula string escaped", value: "=1+1", escape: true, want: "'=1+1"},
 		{name: "at sign escaped", value: "@sum", escape: true, want: "'@sum"},
