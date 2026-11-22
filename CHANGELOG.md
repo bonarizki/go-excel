@@ -14,6 +14,63 @@ than back-dated to the squash.
 Work that is planned but not started is not listed here; see
 [docs/FEATURE_CHECKLIST.md](docs/FEATURE_CHECKLIST.md) Part 2.
 
+## [Unreleased]
+
+Correctness and untrusted-input hardening ahead of `0.4.0`. Several
+fixes change observable behavior; they are listed first.
+
+### Breaking Changes
+
+- **Struct export with `WithHeadings(true)` (the default) writes a
+  header row of tag names.** Previously the first record was consumed
+  as the header, so exporting `[]User` silently lost a user. Struct
+  columns now come from `excel.GetFieldTags`, the same walker import
+  uses, so exported files round-trip through `ImportToStructs`.
+- **`stream.RowProcessor`'s `rowNum` is the sheet row**, counting the
+  heading row, with gaps for rows skipped by `WithImportRows` or
+  `WithImportSkipEmptyRows`. It was a dense 1..N submit counter.
+- **Default date layouts no longer include `02-01-2006` (day-first) or
+  `01/02/2006`.** Both were ambiguous. Day-first files need
+  `excel.WithDateLayouts("02-01-2006", "02/01/2006")`. Dates without a
+  zone are parsed in UTC unless `WithTimeLocation` is set.
+- **`required` is enforced on empty values**, not only on missing
+  columns.
+- **CSV export escapes formula triggers** (`=`, `+`, `-`, `@`, tab, CR)
+  in string cells by prefixing `'`. Opt out with
+  `WithCSVFormulaEscaping(false)`.
+- **Integer conversion rejects fractions and overflow** instead of
+  truncating, and `ConvertToType` is deprecated in favor of
+  `RowMapper`.
+
+### Added
+
+- `excel.NormalizeCell`, `WithUnzipLimits` / stream
+  `WithImportUnzipLimits` (default total 1 GiB), `WithMaxErrors`
+  (default 1000) with `BasicImporter.ErrorCount`, `WithDateLayouts`,
+  `WithTimeLocation`, `excel.DefaultDateLayouts`, `WithCSVLazyQuotes`,
+  `WithCSVFormulaEscaping`, `RowMapper.SetDateLayouts` and
+  `RowMapper.SetTimeLocation`.
+- Excel serial numbers (e.g. `46349`) import into `time.Time` fields.
+
+### Fixed
+
+- Struct mapping dispatches on the field's kind, so named types
+  (`type Status int`), pointers, `encoding.TextUnmarshaler` and
+  `sql.Scanner` fields import; a `Converter` returning the wrong type is
+  an error instead of being dropped.
+- Pointer and `driver.Valuer` cells export their value instead of a
+  memory address, in XLSX, CSV and the stream exporter.
+- A nil embedded pointer no longer shifts later export columns, and a
+  column named `omitempty` is not treated as the option.
+- `WithColumns` cuts the heading row to the same window as data rows.
+- `ImportToStructs` reports the real sheet row in `ValidationError.Row`
+  and honors `StopOnError(false)` and `ErrorCallback`.
+- Reusing a `BasicImporter` no longer carries over rows, headings or
+  errors, and closes the previously opened workbook.
+- `ImportStream` reports rows whose results were never delivered.
+- `GetFieldTags` returns a copy, so callers cannot corrupt the cache.
+- Tag `pattern:` values may contain commas.
+
 ## [0.3.0] - 2026-08-23
 
 This release closes out the harden pass tracked in
