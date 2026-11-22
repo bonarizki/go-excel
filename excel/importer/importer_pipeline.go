@@ -74,7 +74,7 @@ func (i *BasicImporter) extractHeadings(sheetRows [][]string) [][]string {
 		return sheetRows
 	}
 
-	firstRow := sheetRows[0]
+	firstRow := i.columnWindow(sheetRows[0])
 	i.headings = make([]string, len(firstRow))
 	for j, cell := range firstRow {
 		cellValue := cell
