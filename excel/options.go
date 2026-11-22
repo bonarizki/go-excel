@@ -269,6 +269,14 @@ func WithCSVTimeLayout(layout string) Option {
 	}
 }
 
+// WithCSVFormulaEscaping enables or disables OWASP-style CSV formula
+// injection protection for string-like field values. Default: enabled.
+func WithCSVFormulaEscaping(enabled bool) Option {
+	return func(c *config.Config) {
+		c.CSV.EscapeFormulas = enabled
+	}
+}
+
 // WithStrictFormat controls whether exporting to CSV with an XLSX-only
 // feature configured (styles, column widths, a custom start cell,
 // auto-sized columns, document properties, or more than one sheet

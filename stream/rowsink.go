@@ -44,18 +44,19 @@ func (s *xlsxStreamSink) flush() error {
 // document, since that buffering is exactly what streaming exists to
 // avoid.
 type csvStreamSink struct {
-	w      *csvio.Writer
-	layout string
+	w              *csvio.Writer
+	layout         string
+	escapeFormulas bool
 }
 
-func newCSVStreamSink(w *csvio.Writer, layout string) *csvStreamSink {
-	return &csvStreamSink{w: w, layout: layout}
+func newCSVStreamSink(w *csvio.Writer, layout string, escapeFormulas bool) *csvStreamSink {
+	return &csvStreamSink{w: w, layout: layout, escapeFormulas: escapeFormulas}
 }
 
 func (s *csvStreamSink) writeRow(_ int, row []any) error {
 	fields := make([]string, len(row))
 	for i, v := range row {
-		fields[i] = csvio.FormatValue(v, s.layout)
+		fields[i] = csvio.FormatValue(v, s.layout, s.escapeFormulas)
 	}
 	return s.w.WriteRecord(fields)
 }

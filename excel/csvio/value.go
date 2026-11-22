@@ -8,6 +8,7 @@ package csvio
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -21,16 +22,16 @@ import (
 // notation (e.g. "1.234568e+06") for large magnitudes - a spreadsheet
 // opening the CSV would otherwise show exponent notation where the
 // source data had a plain number.
-func FormatValue(v any, timeLayout string) string { //nolint:gocyclo // flat type switch over primitive kinds, not meaningfully complex
+func FormatValue(v any, timeLayout string, escapeFormulas bool) string { //nolint:gocyclo // flat type switch over primitive kinds, not meaningfully complex
 	if v == nil {
 		return ""
 	}
 
 	switch val := v.(type) {
 	case string:
-		return val
+		return formatStringField(val, escapeFormulas)
 	case []byte:
-		return string(val)
+		return formatStringField(string(val), escapeFormulas)
 	case bool:
 		return strconv.FormatBool(val)
 	case time.Time:
@@ -64,8 +65,31 @@ func FormatValue(v any, timeLayout string) string { //nolint:gocyclo // flat typ
 	case uint64:
 		return strconv.FormatUint(val, 10)
 	case fmt.Stringer:
-		return val.String()
+		return formatStringField(val.String(), escapeFormulas)
 	default:
 		return fmt.Sprintf("%v", val)
+	}
+}
+
+func formatStringField(s string, escapeFormulas bool) string {
+	if !escapeFormulas || s == "" {
+		return s
+	}
+	if needsCSVFormulaEscape(s) {
+		return "'" + s
+	}
+	return s
+}
+
+func needsCSVFormulaEscape(s string) bool {
+	r := []rune(s)
+	if len(r) == 0 {
+		return false
+	}
+	switch r[0] {
+	case '=', '+', '-', '@':
+		return true
+	default:
+		return strings.HasPrefix(s, "\t") || strings.HasPrefix(s, "\r")
 	}
 }
