@@ -28,7 +28,7 @@ func TestExporter_PrepareData_SliceOfStruct(t *testing.T) {
 		{Name: "Ada", hidden: 1, Skip: "x"},
 		{Name: "Bob", hidden: 2, Skip: "y"},
 	}
-	rows, err := NewExporter(data, excel.WithPreallocation(true)).prepareData(context.Background())
+	rows, err := NewExporter(data, excel.WithPreallocation(true), excel.WithHeadings(false)).prepareData(context.Background())
 	if err != nil {
 		t.Fatalf("prepareData: %v", err)
 	}
@@ -42,7 +42,7 @@ func TestExporter_PrepareData_SliceOfStruct(t *testing.T) {
 
 func TestExporter_PrepareData_ArrayOfStruct(t *testing.T) {
 	data := [1]reflectionPerson{{Name: "Ada"}}
-	rows, err := NewExporter(data).prepareData(context.Background())
+	rows, err := NewExporter(data, excel.WithHeadings(false)).prepareData(context.Background())
 	if err != nil {
 		t.Fatalf("prepareData: %v", err)
 	}
@@ -53,7 +53,7 @@ func TestExporter_PrepareData_ArrayOfStruct(t *testing.T) {
 
 func TestExporter_PrepareData_PointerToStruct(t *testing.T) {
 	data := &reflectionPerson{Name: "Ada"}
-	rows, err := NewExporter(data).prepareData(context.Background())
+	rows, err := NewExporter(data, excel.WithHeadings(false)).prepareData(context.Background())
 	if err != nil {
 		t.Fatalf("prepareData: %v", err)
 	}
@@ -67,7 +67,7 @@ func TestExporter_PrepareData_EmbeddedStruct(t *testing.T) {
 		ReflectionBase: ReflectionBase{Name: "Ada"},
 		Age:            36,
 	}
-	rows, err := NewExporter(data).prepareData(context.Background())
+	rows, err := NewExporter(data, excel.WithHeadings(false)).prepareData(context.Background())
 	if err != nil {
 		t.Fatalf("prepareData: %v", err)
 	}
@@ -88,7 +88,7 @@ func TestExporter_PrepareData_ScalarFallback(t *testing.T) {
 
 func TestExporter_PrepareData_SliceOfPointerToStruct(t *testing.T) {
 	data := []*reflectionPerson{{Name: "Ada"}}
-	rows, err := NewExporter(data).prepareData(context.Background())
+	rows, err := NewExporter(data, excel.WithHeadings(false)).prepareData(context.Background())
 	if err != nil {
 		t.Fatalf("prepareData: %v", err)
 	}

@@ -21,15 +21,16 @@ import (
 // BasicExporter is a batch exporter, not a streaming one. The stream
 // package has its own CSV sink that writes incrementally.
 type csvSink struct {
-	buf    bytes.Buffer
-	writer *csvio.Writer
-	layout string
+	buf            bytes.Buffer
+	writer         *csvio.Writer
+	layout         string
+	escapeFormulas bool
 }
 
 // newCSVSink creates a csvSink using opts for delimiter, BOM, line
 // ending, and time formatting.
 func newCSVSink(opts config.CSVOptions) (*csvSink, error) {
-	s := &csvSink{layout: opts.TimeLayout}
+	s := &csvSink{layout: opts.TimeLayout, escapeFormulas: opts.EscapeFormulas}
 
 	w, err := csvio.NewWriter(&s.buf, opts)
 	if err != nil {
@@ -53,7 +54,7 @@ func (s *csvSink) WriteRow(ctx context.Context, rowNum int, row []any, _ bool) e
 
 	fields := make([]string, len(row))
 	for i, v := range row {
-		fields[i] = csvio.FormatValue(v, s.layout)
+		fields[i] = csvio.FormatValue(v, s.layout, s.escapeFormulas)
 	}
 
 	if err := s.writer.WriteRecord(fields); err != nil {

@@ -16,9 +16,10 @@ import (
 // processor. It returns once every row has been processed or once ctx
 // is canceled, returning any resulting error.
 func (si *StreamImporter) ImportStream(ctx context.Context, processor RowProcessor) error {
-	rowChan := make(chan []any, si.numWorkers*2)
+	rowChan := make(chan sourceRow, si.numWorkers*2)
 
 	si.workerPool = concurrency.NewWorkerPool(si.numWorkers, si.taskProcessor(processor))
+	atomic.StoreUint64(&si.resultsReceived, 0)
 
 	// readerWG and cancelRun must be declared in this exact order so
 	// their deferred calls run in reverse: workerPool.Stop() first
@@ -45,15 +46,23 @@ func (si *StreamImporter) ImportStream(ctx context.Context, processor RowProcess
 	return si.dispatchRows(ctx, rowChan, workerErrChan, drainerDone, errChan)
 }
 
+// sourceRow is a data row together with its 1-based position in the
+// sheet or file, the heading row included, so processors can report the
+// row number a user would see in a spreadsheet application.
+type sourceRow struct {
+	num   int
+	cells []any
+}
+
 // taskProcessor adapts processor into the ProcessFunc shape expected by
 // the worker pool, decoding task.Data back into the row it wrapped.
 func (si *StreamImporter) taskProcessor(processor RowProcessor) concurrency.ProcessFunc {
 	return func(ctx context.Context, task concurrency.Task) (any, error) {
-		rowData, ok := task.Data.([]any)
+		src, ok := task.Data.(sourceRow)
 		if !ok {
 			return nil, fmt.Errorf("unexpected task data type %T for row task %d", task.Data, task.ID)
 		}
-		rowNum := int(task.ID)
+		rowNum, rowData := src.num, src.cells
 
 		// rowData is not returned to the pool afterward: PutRow
 		// immediately clears and recycles the slice, so any processor
@@ -75,6 +84,7 @@ func (si *StreamImporter) taskProcessor(processor RowProcessor) concurrency.Proc
 func (si *StreamImporter) drainWorkerErrors(workerErrChan chan error, done chan struct{}) {
 	defer close(done)
 	for res := range si.workerPool.Results() {
+		atomic.AddUint64(&si.resultsReceived, 1)
 		if res.Err != nil {
 			select {
 			case workerErrChan <- res.Err:
@@ -90,7 +100,7 @@ func (si *StreamImporter) drainWorkerErrors(workerErrChan chan error, done chan 
 // errChan are both closed on return so dispatchRows can observe reader
 // completion either way, and wg.Done unblocks ImportStream's deferred
 // Wait.
-func (si *StreamImporter) runReader(runCtx context.Context, rowChan chan []any, errChan chan error, wg *sync.WaitGroup) {
+func (si *StreamImporter) runReader(runCtx context.Context, rowChan chan sourceRow, errChan chan error, wg *sync.WaitGroup) {
 	defer wg.Done()
 	defer close(rowChan)
 	defer close(errChan)
@@ -105,7 +115,7 @@ func (si *StreamImporter) runReader(runCtx context.Context, rowChan chan []any, 
 // workerErrChan and errChan for the first failure, and once rowChan
 // closes, hands off to finishDispatch for shutdown and final error
 // reporting.
-func (si *StreamImporter) dispatchRows(ctx context.Context, rowChan <-chan []any, workerErrChan <-chan error, drainerDone <-chan struct{}, errChan <-chan error) error {
+func (si *StreamImporter) dispatchRows(ctx context.Context, rowChan <-chan sourceRow, workerErrChan <-chan error, drainerDone <-chan struct{}, errChan <-chan error) error {
 	var taskID uint64
 	var readerErr error
 	readerDone := false
@@ -176,6 +186,12 @@ func (si *StreamImporter) finishDispatch(workerErrChan <-chan error, drainerDone
 
 	if readerErr != nil {
 		return fmt.Errorf("read rows: %w", readerErr)
+	}
+
+	submitted := si.workerPool.Stats().TasksSubmitted
+	received := atomic.LoadUint64(&si.resultsReceived)
+	if received < submitted {
+		return fmt.Errorf("import incomplete: %d row(s) not processed", submitted-received)
 	}
 	return nil
 }

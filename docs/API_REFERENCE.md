@@ -2,8 +2,8 @@
 
 > Complete API documentation for go-excel (`github.com/bonarizki/go-excel`)
 
-**Covers**: `v0.3.0` (see [CHANGELOG.md](../CHANGELOG.md))
-**Last audited against real signatures**: 2026-08-23
+**Covers**: `v0.4.0` (see [CHANGELOG.md](../CHANGELOG.md))
+**Last audited against real signatures**: 2026-11-23
 
 ---
 
@@ -1019,17 +1019,21 @@ type User struct {
 - `max:N` - Maximum value (for numeric types, enforced only with `WithValidation(true)`)
 - `pattern:regex` - Regex validation against the raw string value, enforced only with `WithValidation(true)`
 
-There is no `format:` tag option; `time.Time` fields are parsed by trying
-a fixed list of formats (`time.RFC3339`, `2006-01-02`,
-`2006-01-02 15:04:05`, `02-01-2006`, `01/02/2006`, `2006/01/02`,
-`01/02/06 15:04`, `1/2/06 15:04`, and a couple more — see
-`excel/converter.go`'s `convertToTime`), not a per-field layout.
+There is no `format:` tag option. `time.Time` fields try the layouts in
+`excel.DefaultDateLayouts()` (ISO forms plus excelize's month-first
+`01-02-06` and `1/2/06 15:04`), then fall back to an Excel serial number.
+No day-first layout is tried by default; for day-first files use
+`WithDateLayouts("02-01-2006", "02/01/2006")`. Dates without a zone are
+parsed in UTC unless `WithTimeLocation` is set.
 
-**Supported Type Conversions:**
-- string → int, int64, int32, uint, uint64
+**Supported Type Conversions** (by kind, so named types work too):
+- string → any signed/unsigned integer kind (overflow and fractions are errors)
 - string → float32, float64
-- string → time.Time (tries several fixed formats, see above)
 - string → bool ("true"/"false", "yes"/"no", "1"/"0")
+- string → time.Time (see above)
+- pointers to any of the above (empty cell leaves the pointer nil)
+- types implementing `encoding.TextUnmarshaler` or `sql.Scanner`
+  (for example `sql.NullInt64`)
 
 ---
 
@@ -1485,10 +1489,10 @@ Function type for processing rows during streaming import.
 
 **Parameters:**
 - `ctx`: Context (for cancellation)
-- `rowNum`: A 1-based sequential counter over the rows handed to
-  processors, **not** the row's absolute position in the sheet: rows
-  skipped by `WithImportRows` or `WithImportSkipEmptyRows`, or the
-  heading row when `WithImportHeadings` is set, are never counted
+- `rowNum`: The row's 1-based position in the sheet or file, counting
+  the heading row, so it matches what a spreadsheet application shows.
+  Rows skipped by `WithImportRows` or `WithImportSkipEmptyRows` leave
+  gaps; it is not a dense 1..N counter
 - `row`: Row data
 
 **Returns:**

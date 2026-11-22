@@ -5,7 +5,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/bonarizki/go-excel.svg)](https://pkg.go.dev/github.com/bonarizki/go-excel)
 [![Go Version](https://img.shields.io/badge/Go-1.26%2B-blue)](https://golang.org/dl/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-v0.3.0-green.svg)](CHANGELOG.md)
+[![Status](https://img.shields.io/badge/Status-v0.4.0-green.svg)](CHANGELOG.md)
 
 ---
 
@@ -54,13 +54,13 @@ go test -bench 'BenchmarkStream(Exporter|Importer)(1M|MaxSheet)$' -benchmem -ben
 
 ## 🚫 When Not to Use This Library
 
-This is a pre-1.0 (`v0.x`) library. As of **v0.3.0**, further public renames/removals are not planned before `1.0` (see [CHANGELOG.md](CHANGELOG.md)), but `1.0` itself still waits on soak/usage feedback. Avoid it if:
+This is a pre-1.0 (`v0.x`) library. As of **v0.3.0**, further public renames/removals are not planned before `1.0`; `v0.4.0` changed behavior (not signatures) to fix correctness bugs (see [CHANGELOG.md](CHANGELOG.md)), but `1.0` itself still waits on soak/usage feedback. Avoid it if:
 
 - **You need proven behavior on unpredictable, human-produced files.** This library's test suite is built from clean, programmatically generated fixtures plus a small dirty-file corpus; it has not yet been soaked against a broad set of real-world spreadsheets in production.
 - **You are expecting "streaming" to mean bounded/constant memory.** The `stream` package is row-at-a-time processing so caller code never holds every row in a `[][]any` at once, but peak process memory is still dominated by excelize internally (~98%, see [PERFORMANCE_GUIDE.md](docs/PERFORMANCE_GUIDE.md#understanding-memory-usage)) and still scales with dataset size. If your goal is O(1) memory regardless of file size, this library does not provide that for either XLSX export or import.
 - **You need charts, drawings, formula evaluation, or `.xls` (the legacy binary format).** None of these are implemented; see [docs/FEATURE_CHECKLIST.md](docs/FEATURE_CHECKLIST.md) Part 2 for what is intentionally out of scope.
 - **Your toolchain is below Go 1.26.** `go.mod` pins `go 1.26` as a hard minimum; this is a deliberate toolchain requirement, not a claim that the library needs 1.26 language features for performance.
-- **You cannot pin versions.** Pin an exact tag (e.g. `v0.3.0`) and read the changelog before upgrading — pre-`1.0` still allows bugfix that change behavior.
+- **You cannot pin versions.** Pin an exact tag (e.g. `v0.4.0`) and read the changelog before upgrading — pre-`1.0` still allows bugfix that change behavior.
 
 ## 🚀 Installation
 
@@ -244,8 +244,8 @@ go run main.go
 
 ## 🚀 Current Status
 
-**Version**: v0.3.0
-**Status**: 🚧 Pre-release, API frozen going into `1.0`; only bugfixes until a 2-4 week soak (or public beta) completes
+**Version**: v0.4.0
+**Status**: 🚧 Pre-release (`v0.x`). No public renames planned before `1.0`; behavior fixes are called out in the changelog.
 
 See [CHANGELOG.md](CHANGELOG.md) for release notes.
 

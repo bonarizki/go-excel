@@ -190,7 +190,7 @@ func (se *StreamExporter) newSink() (streamRowSink, error) {
 		if err != nil {
 			return nil, fmt.Errorf("create csv writer: %w", err)
 		}
-		return newCSVStreamSink(cw, se.csvOptions.TimeLayout), nil
+		return newCSVStreamSink(cw, se.csvOptions.TimeLayout, se.csvOptions.EscapeFormulas), nil
 	}
 
 	sw, err := se.file.NewStreamWriter(se.sheetName)

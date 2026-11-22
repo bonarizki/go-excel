@@ -85,12 +85,10 @@ func TestImportStream_CSVFormat_WithHeadings(t *testing.T) {
 	if len(seenRowNums) != 2 {
 		t.Errorf("expected 2 data rows, got %d", len(seenRowNums))
 	}
-	// rowNum is the 1-based position among rows forwarded to the
-	// processor, not the row's absolute position in the source file, so
-	// with the heading row excluded the two data rows are numbered 1
-	// and 2 (matches ImportStream's existing XLSX behavior).
-	if !seenRowNums[1] || !seenRowNums[2] {
-		t.Errorf("expected data rows numbered 1 and 2, got %v", seenRowNums)
+	// rowNum is the row's position in the file with the heading row
+	// counted as row 1, so the two data rows are rows 2 and 3.
+	if !seenRowNums[2] || !seenRowNums[3] {
+		t.Errorf("expected data rows numbered 2 and 3, got %v", seenRowNums)
 	}
 }
 
@@ -210,9 +208,8 @@ func TestImportStream_CSVFormat_RoundTripsExportStreamOutput(t *testing.T) {
 		t.Fatalf("ImportStream failed: %v", err)
 	}
 
-	// rowNum is the 1-based position among forwarded rows, excluding
-	// the already-consumed heading row.
-	want := map[int][]any{1: {"1", "Alice"}, 2: {"2", "Bob"}, 3: {"3", "Charlie"}}
+	// rowNum counts the heading row as row 1.
+	want := map[int][]any{2: {"1", "Alice"}, 3: {"2", "Bob"}, 4: {"3", "Charlie"}}
 	if len(got) != len(want) {
 		t.Fatalf("expected %d rows, got %d: %v", len(want), len(got), got)
 	}

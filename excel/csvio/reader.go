@@ -31,6 +31,7 @@ func NewReader(r io.Reader, opts config.CSVOptions) *Reader {
 	if opts.Delimiter != 0 {
 		cr.Comma = opts.Delimiter
 	}
+	cr.LazyQuotes = opts.LazyQuotes
 	cr.FieldsPerRecord = -1
 
 	return &Reader{csv: cr}

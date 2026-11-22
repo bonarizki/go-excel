@@ -82,7 +82,7 @@ func Example_streamImport() {
 	fmt.Printf("processed %d rows\n", total)
 
 	// Output:
-	// row 1: [1 Alice]
-	// row 2: [2 Bob]
+	// row 2: [1 Alice]
+	// row 3: [2 Bob]
 	// processed 2 rows
 }

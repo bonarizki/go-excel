@@ -161,11 +161,11 @@ func TestCorpus_CSV_SemicolonDelimiter_StreamImporter(t *testing.T) {
 	if len(got) != 2 {
 		t.Fatalf("got %d rows, want 2: %v", len(got), got)
 	}
-	if got[1][0] != "Alice" || got[1][2] != "Jakarta" {
-		t.Errorf("row 1 = %v, want [Alice 30 Jakarta]", got[1])
+	if got[2][0] != "Alice" || got[2][2] != "Jakarta" {
+		t.Errorf("row 2 = %v, want [Alice 30 Jakarta]", got[2])
 	}
-	if got[2][0] != "Bob" || got[2][2] != "Bandung" {
-		t.Errorf("row 2 = %v, want [Bob 25 Bandung]", got[2])
+	if got[3][0] != "Bob" || got[3][2] != "Bandung" {
+		t.Errorf("row 3 = %v, want [Bob 25 Bandung]", got[3])
 	}
 }
 

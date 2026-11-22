@@ -139,12 +139,12 @@ func TestSendRow_RowWiderThanPooledBuffer(t *testing.T) {
 		wideRow[i] = "x"
 	}
 
-	rowChan := make(chan []any, 1)
-	if err := si.sendRow(context.Background(), rowChan, wideRow); err != nil {
+	rowChan := make(chan sourceRow, 1)
+	if err := si.sendRow(context.Background(), rowChan, 1, wideRow); err != nil {
 		t.Fatalf("sendRow: %v", err)
 	}
 
-	got := <-rowChan
+	got := (<-rowChan).cells
 	if len(got) != 200 {
 		t.Errorf("sent row has %d cells, want 200", len(got))
 	}
@@ -207,8 +207,8 @@ func TestDispatchRows_SubmitError(t *testing.T) {
 		taskChan <- concurrency.Task{ID: uint64(i)}
 	}
 
-	rowChan := make(chan []any, 1)
-	rowChan <- []any{"a"}
+	rowChan := make(chan sourceRow, 1)
+	rowChan <- sourceRow{num: 1, cells: []any{"a"}}
 
 	workerErrChan := make(chan error)
 	drainerDone := make(chan struct{})
@@ -231,7 +231,7 @@ func TestDispatchRows_ContextCanceled(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
 
-	rowChan := make(chan []any)
+	rowChan := make(chan sourceRow)
 	workerErrChan := make(chan error)
 	drainerDone := make(chan struct{})
 	errChan := make(chan error)

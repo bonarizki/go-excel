@@ -172,7 +172,12 @@ var knownConfigFields = map[string]bool{
 	"Logger": true, "Metrics": true, "ProgressCallback": true, "ErrorCallback": true,
 	"Format": true, "CSV": true, "Converters": true, "RowMap": true,
 	"StartCell": true, "AutoSizeColumns": true, "DocProperties": true,
-	"StrictFormat": true,
+	"StrictFormat":    true,
+	"MaxUnzipSize":    true,
+	"MaxUnzipXMLSize": true,
+	"MaxErrors":       true,
+	"DateLayouts":     true,
+	"TimeLocation":    true,
 }
 
 // TestConfigClone_NoFieldForgotten cross-checks Config's actual field

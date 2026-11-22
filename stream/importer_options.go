@@ -9,11 +9,22 @@ import (
 
 // RowProcessor transforms a single imported row, returning the row to
 // use (which may be row itself, unmodified) or an error that stops the
-// import. rowNum is a 1-based sequential counter over the rows handed
-// to processors, not the row's absolute position in the sheet: rows
-// skipped by WithImportRows or WithImportSkipEmptyRows, or the heading
-// row when WithImportHeadings is set, are never counted.
+// import. rowNum is the row's 1-based position in the sheet or file,
+// counting the heading row, so it matches what a spreadsheet application
+// shows. Rows skipped by WithImportRows or WithImportSkipEmptyRows leave
+// gaps; rowNum is not a dense 1..N counter.
 type RowProcessor func(ctx context.Context, rowNum int, row []any) ([]any, error)
+
+// WithImportUnzipLimits caps XLSX decompression: total is the maximum
+// uncompressed size of the whole archive (default 1 GiB) and perSheetXML
+// the size above which a worksheet is spooled to disk. 0 defers to
+// excelize's defaults. Ignored for CSV.
+func WithImportUnzipLimits(total, perSheetXML int64) StreamImportOption {
+	return func(si *StreamImporter) {
+		si.maxUnzipSize = total
+		si.maxUnzipXMLSize = perSheetXML
+	}
+}
 
 // StreamImportOption configures StreamImporter behavior.
 type StreamImportOption func(*StreamImporter) //nolint:revive // stutters intentionally: mirrors StreamExportOption naming

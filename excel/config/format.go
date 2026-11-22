@@ -52,6 +52,15 @@ type CSVOptions struct {
 	// TimeLayout formats time.Time values using time.Time.Format.
 	// Default: "2006-01-02 15:04:05".
 	TimeLayout string
+
+	// EscapeFormulas prefixes string-like CSV fields that start with
+	// formula metacharacters so spreadsheet apps do not execute user data.
+	// Default: true.
+	EscapeFormulas bool
+
+	// LazyQuotes allows bare quotes in CSV fields when true
+	// (encoding/csv.LazyQuotes). Default: false.
+	LazyQuotes bool
 }
 
 // DefaultCSVOptions returns the CSVOptions used when a Config has not
@@ -60,10 +69,11 @@ type CSVOptions struct {
 // unambiguously.
 func DefaultCSVOptions() CSVOptions {
 	return CSVOptions{
-		Delimiter:  ',',
-		UseBOM:     true,
-		LineEnding: "\r\n",
-		TimeLayout: "2006-01-02 15:04:05",
+		Delimiter:      ',',
+		UseBOM:         true,
+		LineEnding:     "\r\n",
+		TimeLayout:     "2006-01-02 15:04:05",
+		EscapeFormulas: true,
 	}
 }
 

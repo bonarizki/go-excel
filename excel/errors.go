@@ -89,7 +89,9 @@ func (e *ImportError) Unwrap() error {
 // ValidationError represents a validation error for a specific row
 // Used when data validation fails during import/export.
 type ValidationError struct {
-	// Row is the row number where validation failed (0-indexed)
+	// Row is the 1-based sheet row where validation failed, counting the
+	// heading row, or 0 when the row is not known (e.g. RowMapper.MapRow
+	// called directly).
 	Row int
 
 	// Field is the field name that failed validation

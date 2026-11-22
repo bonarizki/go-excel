@@ -197,6 +197,39 @@ type Config struct {
 	// Logger, if one is set.
 	// Default: false (degrade and warn)
 	StrictFormat bool
+
+	// MaxUnzipSize caps the total uncompressed size, in bytes, of an
+	// XLSX file being imported. An XLSX is a zip archive, so a small
+	// upload can expand enormously; opening fails once this is exceeded.
+	// 0 uses excelize's own default (16 GiB).
+	// Default: 1 GiB
+	MaxUnzipSize int64
+
+	// MaxUnzipXMLSize is the size, in bytes, above which a single
+	// worksheet's XML is spooled to a temporary file instead of being
+	// held in memory. It must not exceed MaxUnzipSize.
+	// 0 uses excelize's own default (16 MiB).
+	// Default: 0
+	MaxUnzipXMLSize int64
+
+	// MaxErrors caps how many row errors are kept for GetErrors when
+	// StopOnError is false, so a hostile file with millions of bad rows
+	// cannot grow memory without bound. Errors past the cap are still
+	// counted by ErrorCount. 0 means unlimited.
+	// Default: 1000
+	MaxErrors int
+
+	// DateLayouts are the time layouts tried, in order, when importing
+	// into a time.Time field. Excel serial numbers are accepted as a
+	// fallback. nil uses excel.DefaultDateLayouts, which contains no
+	// day-first layouts.
+	// Default: nil
+	DateLayouts []string
+
+	// TimeLocation is the zone applied to DateLayouts that carry no zone
+	// of their own.
+	// Default: nil (UTC)
+	TimeLocation *time.Location
 }
 
 // DefaultConfig returns a Config with sensible default values
@@ -232,5 +265,9 @@ func DefaultConfig() *Config {
 		// Document format
 		Format: FileFormatXLSX,
 		CSV:    DefaultCSVOptions(),
+
+		// Untrusted input limits
+		MaxUnzipSize: 1 << 30,
+		MaxErrors:    1000,
 	}
 }

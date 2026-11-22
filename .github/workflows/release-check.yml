@@ -1,0 +1,47 @@
+name: Release check
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  module-path:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: go.mod module path matches the repository
+        run: |
+          want="module github.com/${GITHUB_REPOSITORY}"
+          got=$(head -1 go.mod)
+          if [ "$got" != "$want" ]; then
+            echo "go.mod declares '$got', expected '$want'"
+            exit 1
+          fi
+
+  go-get:
+    runs-on: ubuntu-latest
+    needs: module-path
+    steps:
+      - uses: actions/setup-go@v7
+        with:
+          go-version: "1.26"
+          check-latest: true
+      - name: go get the tag from a scratch module
+        env:
+          GOPROXY: direct
+          GOFLAGS: -mod=mod
+        run: |
+          mkdir scratch && cd scratch
+          go mod init scratch
+          cat > main.go <<'GO'
+          package main
+
+          import _ "github.com/bonarizki/go-excel/excel"
+
+          func main() {}
+          GO
+          go get "github.com/${GITHUB_REPOSITORY}@${GITHUB_REF_NAME}"
+          go build ./...

@@ -104,6 +104,42 @@ func WithStopOnError(stop bool) Option {
 	}
 }
 
+// WithUnzipLimits sets Config.MaxUnzipSize and Config.MaxUnzipXMLSize
+// for XLSX imports. Pass 0 for either to use excelize's default. Lower
+// total for endpoints that accept uploads from untrusted users.
+func WithUnzipLimits(total, perSheetXML int64) Option {
+	return func(c *config.Config) {
+		c.MaxUnzipSize = total
+		c.MaxUnzipXMLSize = perSheetXML
+	}
+}
+
+// WithMaxErrors caps how many row errors GetErrors retains when
+// StopOnError is false. 0 means unlimited.
+func WithMaxErrors(n int) Option {
+	return func(c *config.Config) {
+		c.MaxErrors = n
+	}
+}
+
+// WithDateLayouts sets the layouts tried, in order, when importing into
+// time.Time fields, replacing DefaultDateLayouts. For day-first files:
+//
+//	excel.WithDateLayouts("02-01-2006", "02/01/2006", "2006-01-02")
+func WithDateLayouts(layouts ...string) Option {
+	return func(c *config.Config) {
+		c.DateLayouts = append([]string(nil), layouts...)
+	}
+}
+
+// WithTimeLocation sets the zone applied to date layouts that carry no
+// zone of their own. Defaults to UTC.
+func WithTimeLocation(loc *time.Location) Option {
+	return func(c *config.Config) {
+		c.TimeLocation = loc
+	}
+}
+
 // WithTimeout sets the maximum duration for the operation
 // If timeout is 0, no timeout is enforced.
 func WithTimeout(timeout time.Duration) Option {
@@ -266,6 +302,21 @@ func WithCSVLineEnding(lineEnding string) Option {
 func WithCSVTimeLayout(layout string) Option {
 	return func(c *config.Config) {
 		c.CSV.TimeLayout = layout
+	}
+}
+
+// WithCSVFormulaEscaping enables or disables OWASP-style CSV formula
+// injection protection for string-like field values. Default: enabled.
+func WithCSVFormulaEscaping(enabled bool) Option {
+	return func(c *config.Config) {
+		c.CSV.EscapeFormulas = enabled
+	}
+}
+
+// WithCSVLazyQuotes enables bare-quote tolerance when reading CSV.
+func WithCSVLazyQuotes(enabled bool) Option {
+	return func(c *config.Config) {
+		c.CSV.LazyQuotes = enabled
 	}
 }
 

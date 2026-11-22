@@ -195,12 +195,16 @@ func TestExporter_PrepareData_BareStruct(t *testing.T) {
 		t.Fatalf("Export with bare struct should succeed, got: %v", err)
 	}
 
-	cell, err := exp.GetFile().GetCellValue("Sheet1", "A1")
+	header, err := exp.GetFile().GetCellValue("Sheet1", "A1")
 	if err != nil {
 		t.Fatalf("GetCellValue failed: %v", err)
 	}
-	if cell != "test" {
-		t.Errorf("A1 = %q, want %q", cell, "test")
+	cell, err := exp.GetFile().GetCellValue("Sheet1", "A2")
+	if err != nil {
+		t.Fatalf("GetCellValue failed: %v", err)
+	}
+	if header != "Field" || cell != "test" {
+		t.Errorf("A1, A2 = %q, %q, want %q, %q", header, cell, "Field", "test")
 	}
 }
 

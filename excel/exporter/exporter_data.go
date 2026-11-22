@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"reflect"
-	"strings"
 
 	"github.com/bonarizki/go-excel/excel"
 )
@@ -87,6 +86,36 @@ func (e *BasicExporter) convertSliceToRows(slice []any) ([][]any, error) {
 	return rows, nil
 }
 
+// reflectSliceRows turns each element of a slice or array into a row. For
+// struct elements the heading row comes from the excel tags, not from the
+// first record, which would otherwise be consumed as the header by
+// exportRows.
+func (e *BasicExporter) reflectSliceRows(val reflect.Value) ([][]any, error) {
+	var rows [][]any
+	if e.config.PreallocateRows && val.Len() > 0 {
+		rows = make([][]any, 0, val.Len()+1)
+	}
+
+	if e.config.WithHeadings {
+		header, ok, err := structHeaderRow(val.Type().Elem())
+		if err != nil {
+			return nil, err
+		}
+		if ok {
+			rows = append(rows, header)
+		}
+	}
+
+	for i := 0; i < val.Len(); i++ {
+		row, err := e.reflectStructToRow(val.Index(i))
+		if err != nil {
+			return nil, err
+		}
+		rows = append(rows, row)
+	}
+	return rows, nil
+}
+
 // convertUsingReflection is the fallback for data types not explicitly
 // handled by prepareDataAtDepth: pointers are dereferenced, slices and
 // arrays become one row per element, structs become a single row, and
@@ -99,20 +128,7 @@ func (e *BasicExporter) convertUsingReflection(data any) ([][]any, error) {
 	}
 
 	if val.Kind() == reflect.Slice || val.Kind() == reflect.Array {
-		var rows [][]any
-		if e.config.PreallocateRows && val.Len() > 0 {
-			rows = make([][]any, 0, val.Len())
-		}
-
-		for i := 0; i < val.Len(); i++ {
-			item := val.Index(i)
-			row, err := e.reflectStructToRow(item)
-			if err != nil {
-				return nil, err
-			}
-			rows = append(rows, row)
-		}
-		return rows, nil
+		return e.reflectSliceRows(val)
 	}
 
 	if val.Kind() == reflect.Struct {
@@ -120,17 +136,50 @@ func (e *BasicExporter) convertUsingReflection(data any) ([][]any, error) {
 		if err != nil {
 			return nil, err
 		}
+		if e.config.WithHeadings {
+			header, _, err := structHeaderRow(val.Type())
+			if err != nil {
+				return nil, err
+			}
+			return [][]any{header, row}, nil
+		}
 		return [][]any{row}, nil
 	}
 
 	return [][]any{{data}}, nil
 }
 
+// structHeaderRow returns one heading cell per exported column of t (or
+// *t), named by its excel tag, falling back to the Go field name. ok is
+// false when t is not a struct type.
+func structHeaderRow(t reflect.Type) (header []any, ok bool, err error) {
+	if t.Kind() == reflect.Pointer {
+		t = t.Elem()
+	}
+	if t.Kind() != reflect.Struct {
+		return nil, false, nil
+	}
+	tags, err := excel.GetFieldTags(t)
+	if err != nil {
+		return nil, false, err
+	}
+	header = make([]any, len(tags))
+	for i := range tags {
+		header[i] = tags[i].Name
+	}
+	return header, true, nil
+}
+
 // reflectStructToRow converts a struct (or pointer to struct) to a row,
-// one cell per exported, non-`excel:"-"` field; embedded structs are
-// flattened into the parent row instead of becoming a nested cell.
+// one cell per column reported by excel.GetFieldTags, the same walker
+// the importer uses, so exported files round-trip through
+// ImportToStructs. Fields under a nil embedded pointer become blank
+// cells, keeping every later column in place.
 func (e *BasicExporter) reflectStructToRow(item reflect.Value) ([]any, error) {
 	if item.Kind() == reflect.Pointer {
+		if item.IsNil() {
+			return nil, fmt.Errorf("expected struct or pointer to struct, got nil pointer")
+		}
 		item = item.Elem()
 	}
 
@@ -138,63 +187,21 @@ func (e *BasicExporter) reflectStructToRow(item reflect.Value) ([]any, error) {
 		return nil, fmt.Errorf("expected struct or pointer to struct, got %s", item.Kind())
 	}
 
-	var row []any
-	itemType := item.Type()
+	tags, err := excel.GetFieldTags(item.Type())
+	if err != nil {
+		return nil, err
+	}
 
-	for i := 0; i < item.NumField(); i++ {
-		field := itemType.Field(i)
-		fieldValue := item.Field(i)
-
-		if !field.IsExported() {
+	row := make([]any, len(tags))
+	for i := range tags {
+		fieldValue, err := item.FieldByIndexErr(tags[i].Index)
+		if err != nil {
 			continue
 		}
-
-		tagValue, hasTag := field.Tag.Lookup("excel")
-		if hasTag && tagValue == "-" {
+		if tags[i].OmitEmpty && fieldValue.IsZero() {
 			continue
 		}
-
-		if isEmbeddedStructField(&field, fieldValue) {
-			embeddedRow, err := e.reflectStructToRow(fieldValue)
-			if err != nil {
-				return nil, err
-			}
-			row = append(row, embeddedRow...)
-			continue
-		}
-
-		if hasOmitEmptyTag(tagValue) && fieldValue.IsZero() {
-			row = append(row, nil)
-			continue
-		}
-
-		row = append(row, fieldValue.Interface())
+		row[i] = excel.NormalizeCell(fieldValue.Interface())
 	}
 	return row, nil
-}
-
-// isEmbeddedStructField reports whether field is an anonymous struct or
-// pointer-to-struct field, in which case its columns are flattened into
-// the parent row instead of being treated as a single cell value.
-func isEmbeddedStructField(field *reflect.StructField, fieldValue reflect.Value) bool {
-	if !field.Anonymous {
-		return false
-	}
-	if fieldValue.Kind() == reflect.Struct {
-		return true
-	}
-	return fieldValue.Kind() == reflect.Pointer && fieldValue.Elem().Kind() == reflect.Struct
-}
-
-// hasOmitEmptyTag reports whether tag's comma-separated `excel:"..."`
-// options include "omitempty", mirroring encoding/json's option syntax.
-// A zero-value field with this option renders as a blank cell instead
-// of its literal zero value (0, "", false, and so on).
-func hasOmitEmptyTag(tag string) bool {
-	for _, part := range strings.Split(tag, ",") {
-		if strings.TrimSpace(part) == "omitempty" {
-			return true
-		}
-	}
-	return false
 }

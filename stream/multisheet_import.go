@@ -9,6 +9,7 @@ import (
 
 	"github.com/bonarizki/go-excel/excel"
 	"github.com/bonarizki/go-excel/excel/config"
+	"github.com/bonarizki/go-excel/internal/xlsxopen"
 	"github.com/xuri/excelize/v2"
 )
 
@@ -130,7 +131,7 @@ func (si *StreamImporter) ImportFromSheet(ctx context.Context, filename, sheetNa
 		return err
 	}
 
-	file, err := excelize.OpenFile(filename)
+	file, err := xlsxopen.File(filename, si.maxUnzipSize, si.maxUnzipXMLSize)
 	if err != nil {
 		return fmt.Errorf("failed to open file: %w", err)
 	}
@@ -181,7 +182,7 @@ func (si *StreamImporter) ImportAllSheets(ctx context.Context, filename string, 
 		return err
 	}
 
-	file, err := excelize.OpenFile(filename)
+	file, err := xlsxopen.File(filename, si.maxUnzipSize, si.maxUnzipXMLSize)
 	if err != nil {
 		return fmt.Errorf("failed to open file: %w", err)
 	}
@@ -250,7 +251,7 @@ func (si *StreamImporter) GetSheetNames(filename string) (names []string, err er
 		return nil, rejectErr
 	}
 
-	file, err := excelize.OpenFile(filename)
+	file, err := xlsxopen.File(filename, si.maxUnzipSize, si.maxUnzipXMLSize)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open file: %w", err)
 	}

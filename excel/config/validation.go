@@ -92,6 +92,11 @@ func (c *Config) Clone() *Config {
 		AutoSizeColumns:  c.AutoSizeColumns,
 		DocProperties:    c.DocProperties,
 		StrictFormat:     c.StrictFormat,
+		MaxUnzipSize:     c.MaxUnzipSize,
+		MaxUnzipXMLSize:  c.MaxUnzipXMLSize,
+		MaxErrors:        c.MaxErrors,
+		DateLayouts:      append([]string(nil), c.DateLayouts...),
+		TimeLocation:     c.TimeLocation,
 	}
 
 	return clone

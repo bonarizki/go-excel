@@ -14,7 +14,7 @@ import (
 // withHeadings is set, already had its first row consumed by
 // readHeadings, so this only ever sees data rows. It returns an error
 // if a row fails to decode or ctx is canceled.
-func (si *StreamImporter) readRows(ctx context.Context, rowChan chan<- []any) error {
+func (si *StreamImporter) readRows(ctx context.Context, rowChan chan<- sourceRow) error {
 	startRow := si.startRow
 
 	// rowNum counts the heading row as row 1, matching the row numbers
@@ -55,7 +55,7 @@ func (si *StreamImporter) readRows(ctx context.Context, rowChan chan<- []any) er
 			continue
 		}
 
-		if err := si.sendRow(ctx, rowChan, row); err != nil {
+		if err := si.sendRow(ctx, rowChan, rowNum, row); err != nil {
 			return err
 		}
 	}
@@ -69,7 +69,7 @@ func (si *StreamImporter) readRows(ctx context.Context, rowChan chan<- []any) er
 // rowData is not returned to the pool once it reaches the processor,
 // since the processor may retain it; see the taskProcessor comment in
 // importer_import.go.
-func (si *StreamImporter) sendRow(ctx context.Context, rowChan chan<- []any, row []string) error {
+func (si *StreamImporter) sendRow(ctx context.Context, rowChan chan<- sourceRow, rowNum int, row []string) error {
 	rowData := si.poolManager.GetRow()
 
 	// Buffer too small for this row (rare with proper pool
@@ -86,7 +86,7 @@ func (si *StreamImporter) sendRow(ctx context.Context, rowChan chan<- []any, row
 	}
 
 	select {
-	case rowChan <- rowData:
+	case rowChan <- sourceRow{num: rowNum, cells: rowData}:
 	case <-ctx.Done():
 		return ctx.Err()
 	}

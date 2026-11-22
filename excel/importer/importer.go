@@ -36,7 +36,14 @@ type BasicImporter struct {
 	totalRows int64
 
 	// errors collects errors during processing if StopOnError is false.
-	errors []error
+	errors     []error
+	errorCount int
+
+	// rowNums holds the 1-based sheet row of each entry in rows, and
+	// firstRowNum the sheet row of the first row after headings and
+	// StartRow, so struct mapping can report real row numbers.
+	rowNums     []int
+	firstRowNum int
 
 	// shouldCloseFile is true if the file was opened by this importer
 	// (and must be closed on Close()), false if it was provided
@@ -144,10 +151,17 @@ func (i *BasicImporter) GetHeadings() []string {
 	return headings
 }
 
-// GetErrors returns all errors collected during import. Only populated
-// if StopOnError is false.
+// GetErrors returns the errors collected during import, at most
+// Config.MaxErrors of them. Only populated if StopOnError is false.
 func (i *BasicImporter) GetErrors() []error {
 	return i.errors
+}
+
+// ErrorCount returns how many row errors occurred during the last
+// import, including those beyond Config.MaxErrors that GetErrors no
+// longer retains.
+func (i *BasicImporter) ErrorCount() int {
+	return i.errorCount
 }
 
 // GetConfig returns a copy of the importer configuration, safe to
