@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"strings"
 	"sync"
 )
 
@@ -76,10 +77,16 @@ func (m *RowMapper) mapField(row []any, elem reflect.Value, tag *TagOptions) err
 	}
 
 	if colIdx >= len(row) {
+		if tag.Required {
+			return NewValidationError(0, tag.Name, nil, fmt.Sprintf("required field %s is empty", tag.Name), nil)
+		}
 		return nil
 	}
 
 	val := row[colIdx]
+	if tag.Required && (val == nil || strings.TrimSpace(fmt.Sprint(val)) == "") {
+		return NewValidationError(0, tag.Name, fmt.Sprint(val), fmt.Sprintf("required field %s is empty", tag.Name), nil)
+	}
 	if val == nil {
 		return nil
 	}
