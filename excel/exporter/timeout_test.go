@@ -47,13 +47,24 @@ func TestExporter_NoTimeout_NoContextDeadline(t *testing.T) {
 	}
 }
 
-// TestExporter_Timeout_Expires verifies that an already-expired timeout
+// TestExporter_Timeout_Expires verifies that an elapsed WithTimeout
 // causes Export to fail with a context error rather than succeeding.
+//
+// The timeout is applied when Export starts (not at construction), so a
+// pre-Export sleep cannot expire it. Waiting on ctx.Done() inside
+// BeforeExport is deterministic on Windows, where a 1ns timer often does
+// not fire before a tiny export finishes.
 func TestExporter_Timeout_Expires(t *testing.T) {
-	exp := NewExporter([][]any{{"a"}, {"b"}}, excel.WithTimeout(1*time.Nanosecond))
+	exp := NewExporter([][]any{{"a"}, {"b"}}, excel.WithTimeout(10*time.Millisecond))
 
-	// Give the 1ns timeout time to elapse before Export even starts.
-	time.Sleep(time.Millisecond)
+	exp.On(excel.BeforeExport, func(ctx context.Context, _ *excel.Event) error {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-time.After(200 * time.Millisecond):
+			return nil
+		}
+	})
 
 	if err := exp.Export(context.Background()); err == nil {
 		t.Fatal("expected Export to fail once the configured timeout has elapsed")

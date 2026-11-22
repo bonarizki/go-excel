@@ -72,7 +72,7 @@ test suite without `-race` does not prove the code is safe.
 ## PROJECT STRUCTURE
 
 ```
-go-lib-matwebsite/
+go-excel/
 ├── excel/               # Shared types: config, options, events, styling, struct-tag mapping
 │   ├── exporter/        # BasicExporter
 │   └── importer/        # BasicImporter
@@ -725,7 +725,7 @@ module github.com/bonarizki/go-excel
 
 go 1.26
 
-require github.com/xuri/excelize/v2 v2.11.0
+require github.com/xuri/excelize/v2 v2.11.1
 ```
 
 ### Support Policy
