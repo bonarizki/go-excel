@@ -10,6 +10,10 @@ import (
 
 // ConvertToType attempts to convert a string value to the target Go type.
 // It supports basic types: string, int, float, bool, and time.Time.
+//
+// Deprecated: matching on the type name cannot handle named types,
+// pointers, encoding.TextUnmarshaler or sql.Scanner. Use RowMapper, which
+// dispatches on the field's reflect.Type instead.
 func ConvertToType(value, targetType string) (any, error) {
 	value = strings.TrimSpace(value)
 
