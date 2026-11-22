@@ -47,7 +47,11 @@ func (i *BasicImporter) importStringRows(ctx context.Context, sheetRows [][]stri
 	}
 
 	sheetRows = i.extractHeadings(sheetRows)
-	sheetRows = i.applyRowRange(sheetRows)
+	sheetRows, rangeStart := i.applyRowRange(sheetRows)
+	i.firstRowNum = rangeStart + 1
+	if i.config.WithHeadings {
+		i.firstRowNum++
+	}
 	i.totalRows = int64(len(sheetRows))
 
 	if i.config.PreallocateRows && len(sheetRows) > 0 {
@@ -60,7 +64,7 @@ func (i *BasicImporter) importStringRows(ctx context.Context, sheetRows [][]stri
 
 	if !i.config.StopOnError && len(i.errors) > 0 {
 		return fmt.Errorf("import completed with %d errors: first error: %w",
-			len(i.errors), i.errors[0])
+			i.errorCount, i.errors[0])
 	}
 
 	return i.dispatcher.Dispatch(ctx, &excel.Event{Type: excel.AfterImport, Data: i.rows})
@@ -99,7 +103,7 @@ func (i *BasicImporter) extractHeadings(sheetRows [][]string) [][]string {
 // exclusive. Computing both bounds against the original sheetRows length,
 // rather than re-slicing between them, keeps EndRow absolute instead of
 // accidentally relative to StartRow.
-func (i *BasicImporter) applyRowRange(sheetRows [][]string) [][]string {
+func (i *BasicImporter) applyRowRange(sheetRows [][]string) (rows [][]string, start int) {
 	rangeEnd := len(sheetRows)
 	if i.config.EndRow > 0 && i.config.EndRow < rangeEnd {
 		rangeEnd = i.config.EndRow
@@ -111,7 +115,7 @@ func (i *BasicImporter) applyRowRange(sheetRows [][]string) [][]string {
 	if rangeStart > rangeEnd {
 		rangeStart = rangeEnd
 	}
-	return sheetRows[rangeStart:rangeEnd]
+	return sheetRows[rangeStart:rangeEnd], rangeStart
 }
 
 // importRows processes and imports all rows from the sheet. Extended in
@@ -186,6 +190,7 @@ func (i *BasicImporter) importRow(ctx context.Context, rowIdx int, row []string)
 	}
 
 	i.rows = append(i.rows, processedRow)
+	i.rowNums = append(i.rowNums, i.firstRowNum+rowIdx)
 	i.currentRow++
 
 	if err := i.dispatcher.Dispatch(ctx, &excel.Event{Type: excel.AfterRowImport, Data: processedRow}); err != nil {

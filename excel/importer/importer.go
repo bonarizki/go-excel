@@ -39,6 +39,12 @@ type BasicImporter struct {
 	errors     []error
 	errorCount int
 
+	// rowNums holds the 1-based sheet row of each entry in rows, and
+	// firstRowNum the sheet row of the first row after headings and
+	// StartRow, so struct mapping can report real row numbers.
+	rowNums     []int
+	firstRowNum int
+
 	// shouldCloseFile is true if the file was opened by this importer
 	// (and must be closed on Close()), false if it was provided
 	// externally via NewImporterWithFile.

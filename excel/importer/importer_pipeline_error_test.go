@@ -63,7 +63,7 @@ func TestApplyRowRange_NegativeStartRowClampedToZero(t *testing.T) {
 	imp.config.StartRow = -3
 
 	rows := [][]string{{"a"}, {"b"}, {"c"}}
-	got := imp.applyRowRange(rows)
+	got, _ := imp.applyRowRange(rows)
 	if len(got) != 3 {
 		t.Errorf("applyRowRange with StartRow=-3 = %d rows, want 3 (clamped to 0)", len(got))
 	}
@@ -79,7 +79,7 @@ func TestApplyRowRange_StartRowBeyondEndClamped(t *testing.T) {
 	imp.config.EndRow = 2
 
 	rows := [][]string{{"a"}, {"b"}, {"c"}}
-	got := imp.applyRowRange(rows)
+	got, _ := imp.applyRowRange(rows)
 	if len(got) != 0 {
 		t.Errorf("applyRowRange with StartRow beyond EndRow = %d rows, want 0", len(got))
 	}
