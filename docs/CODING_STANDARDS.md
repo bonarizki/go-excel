@@ -725,7 +725,7 @@ module github.com/bonarizki/go-excel
 
 go 1.26
 
-require github.com/xuri/excelize/v2 v2.11.0
+require github.com/xuri/excelize/v2 v2.11.1
 ```
 
 ### Support Policy
