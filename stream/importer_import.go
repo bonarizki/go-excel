@@ -19,6 +19,7 @@ func (si *StreamImporter) ImportStream(ctx context.Context, processor RowProcess
 	rowChan := make(chan []any, si.numWorkers*2)
 
 	si.workerPool = concurrency.NewWorkerPool(si.numWorkers, si.taskProcessor(processor))
+	atomic.StoreUint64(&si.resultsReceived, 0)
 
 	// readerWG and cancelRun must be declared in this exact order so
 	// their deferred calls run in reverse: workerPool.Stop() first
@@ -75,6 +76,7 @@ func (si *StreamImporter) taskProcessor(processor RowProcessor) concurrency.Proc
 func (si *StreamImporter) drainWorkerErrors(workerErrChan chan error, done chan struct{}) {
 	defer close(done)
 	for res := range si.workerPool.Results() {
+		atomic.AddUint64(&si.resultsReceived, 1)
 		if res.Err != nil {
 			select {
 			case workerErrChan <- res.Err:
@@ -178,10 +180,10 @@ func (si *StreamImporter) finishDispatch(workerErrChan <-chan error, drainerDone
 		return fmt.Errorf("read rows: %w", readerErr)
 	}
 
-	stats := si.workerPool.Stats()
-	pending := stats.TasksSubmitted - stats.TasksCompleted - stats.TasksFailed
-	if pending > 0 {
-		return fmt.Errorf("import incomplete: %d row(s) not processed", pending)
+	submitted := si.workerPool.Stats().TasksSubmitted
+	received := atomic.LoadUint64(&si.resultsReceived)
+	if received < submitted {
+		return fmt.Errorf("import incomplete: %d row(s) not processed", submitted-received)
 	}
 	return nil
 }

@@ -55,6 +55,12 @@ type StreamImporter struct { //nolint:revive // stutters intentionally: distingu
 	// workerPool processes rows in parallel
 	workerPool *concurrency.WorkerPool
 
+	// resultsReceived counts results drained from workerPool.Results()
+	// during the current ImportStream run. A row whose result never
+	// arrives (abandoned during Stop) shows up as a gap between this and
+	// TasksSubmitted.
+	resultsReceived uint64
+
 	// numWorkers specifies concurrent worker count
 	// Default: runtime.NumCPU()
 	numWorkers int
