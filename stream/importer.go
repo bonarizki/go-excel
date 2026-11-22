@@ -9,6 +9,7 @@ import (
 	"github.com/bonarizki/go-excel/excel"
 	"github.com/bonarizki/go-excel/excel/config"
 	"github.com/bonarizki/go-excel/internal/concurrency"
+	"github.com/bonarizki/go-excel/internal/xlsxopen"
 	"github.com/xuri/excelize/v2"
 )
 
@@ -110,6 +111,11 @@ type StreamImporter struct { //nolint:revive // stutters intentionally: distingu
 	// source yields decoded rows regardless of format. Created once in
 	// NewStreamImporter and shared by readHeadings and readRows.
 	source streamRowSource
+
+	// maxUnzipSize and maxUnzipXMLSize bound XLSX decompression; see
+	// WithImportUnzipLimits. 0 defers to excelize's defaults.
+	maxUnzipSize    int64
+	maxUnzipXMLSize int64
 }
 
 // RowProcessor, StreamImportOption, and all With* option functions are defined in importer_options.go
@@ -132,6 +138,7 @@ func NewStreamImporter(reader io.Reader, opts ...StreamImportOption) (*StreamImp
 		endRow:           0, // 0 = read to end
 		progressInterval: 100,
 		csvOptions:       config.DefaultCSVOptions(),
+		maxUnzipSize:     config.DefaultConfig().MaxUnzipSize,
 	}
 
 	for _, opt := range opts {
@@ -158,7 +165,7 @@ func NewStreamImporter(reader io.Reader, opts ...StreamImportOption) (*StreamImp
 // to the first sheet when unset, and builds si.source from it. On any
 // error, the opened *excelize.File (if any) is closed before returning.
 func (si *StreamImporter) initXLSXSource(reader io.Reader) error {
-	file, err := excelize.OpenReader(reader)
+	file, err := xlsxopen.Reader(reader, si.maxUnzipSize, si.maxUnzipXMLSize)
 	if err != nil {
 		return fmt.Errorf("open excel file: %w", err)
 	}

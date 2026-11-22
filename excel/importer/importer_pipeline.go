@@ -169,7 +169,10 @@ func (i *BasicImporter) importRow(ctx context.Context, rowIdx int, row []string)
 			return false, err
 		}
 
-		i.errors = append(i.errors, err)
+		i.errorCount++
+		if i.config.MaxErrors <= 0 || len(i.errors) < i.config.MaxErrors {
+			i.errors = append(i.errors, err)
+		}
 
 		if i.config.ErrorCallback != nil && !i.config.ErrorCallback(rowIdx, err) {
 			return false, err

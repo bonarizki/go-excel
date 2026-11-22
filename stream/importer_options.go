@@ -15,6 +15,17 @@ import (
 // gaps; rowNum is not a dense 1..N counter.
 type RowProcessor func(ctx context.Context, rowNum int, row []any) ([]any, error)
 
+// WithImportUnzipLimits caps XLSX decompression: total is the maximum
+// uncompressed size of the whole archive (default 1 GiB) and perSheetXML
+// the size above which a worksheet is spooled to disk. 0 defers to
+// excelize's defaults. Ignored for CSV.
+func WithImportUnzipLimits(total, perSheetXML int64) StreamImportOption {
+	return func(si *StreamImporter) {
+		si.maxUnzipSize = total
+		si.maxUnzipXMLSize = perSheetXML
+	}
+}
+
 // StreamImportOption configures StreamImporter behavior.
 type StreamImportOption func(*StreamImporter) //nolint:revive // stutters intentionally: mirrors StreamExportOption naming
 

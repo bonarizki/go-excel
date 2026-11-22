@@ -104,6 +104,24 @@ func WithStopOnError(stop bool) Option {
 	}
 }
 
+// WithUnzipLimits sets Config.MaxUnzipSize and Config.MaxUnzipXMLSize
+// for XLSX imports. Pass 0 for either to use excelize's default. Lower
+// total for endpoints that accept uploads from untrusted users.
+func WithUnzipLimits(total, perSheetXML int64) Option {
+	return func(c *config.Config) {
+		c.MaxUnzipSize = total
+		c.MaxUnzipXMLSize = perSheetXML
+	}
+}
+
+// WithMaxErrors caps how many row errors GetErrors retains when
+// StopOnError is false. 0 means unlimited.
+func WithMaxErrors(n int) Option {
+	return func(c *config.Config) {
+		c.MaxErrors = n
+	}
+}
+
 // WithTimeout sets the maximum duration for the operation
 // If timeout is 0, no timeout is enforced.
 func WithTimeout(timeout time.Duration) Option {

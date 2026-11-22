@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/bonarizki/go-excel/excel"
-	"github.com/xuri/excelize/v2"
+	"github.com/bonarizki/go-excel/internal/xlsxopen"
 )
 
 // ImportFromFile imports data from a file with the given filename.
@@ -83,7 +83,7 @@ func (i *BasicImporter) ImportFromFile(ctx context.Context, filename string) err
 // Import(). OpenFile failures are returned as-is, an *excel.ImportError;
 // a failure from Import() itself is wrapped with "import failed: %w".
 func (i *BasicImporter) importXLSXFile(ctx context.Context, filename string) error {
-	file, err := excelize.OpenFile(filename)
+	file, err := xlsxopen.File(filename, i.config.MaxUnzipSize, i.config.MaxUnzipXMLSize)
 	if err != nil {
 		if i.config.Logger != nil {
 			i.config.Logger.Error("Failed to open file", "error", err)

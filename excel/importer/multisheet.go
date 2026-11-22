@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/bonarizki/go-excel/excel"
-	"github.com/xuri/excelize/v2"
+	"github.com/bonarizki/go-excel/internal/xlsxopen"
 )
 
 // ImportFromSheet imports data from the worksheet named sheetName in
@@ -25,7 +25,7 @@ func (i *BasicImporter) ImportFromSheet(ctx context.Context, filename, sheetName
 		return nil, fmt.Errorf("%w: sheet name cannot be empty", excel.ErrInvalidSheetName)
 	}
 
-	file, err := excelize.OpenFile(filename)
+	file, err := xlsxopen.File(filename, i.config.MaxUnzipSize, i.config.MaxUnzipXMLSize)
 	if err != nil {
 		return nil, excel.NewImportError("OpenFile", sheetName, 0, 0, err)
 	}
@@ -76,7 +76,7 @@ func (i *BasicImporter) ImportAllSheets(ctx context.Context, filename string) (m
 		return i.importAllSheetsCSV(ctx, filename)
 	}
 
-	file, err := excelize.OpenFile(filename)
+	file, err := xlsxopen.File(filename, i.config.MaxUnzipSize, i.config.MaxUnzipXMLSize)
 	if err != nil {
 		return nil, excel.NewImportError("OpenFile", "", 0, 0, err)
 	}

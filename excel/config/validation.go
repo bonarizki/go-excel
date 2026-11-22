@@ -92,6 +92,9 @@ func (c *Config) Clone() *Config {
 		AutoSizeColumns:  c.AutoSizeColumns,
 		DocProperties:    c.DocProperties,
 		StrictFormat:     c.StrictFormat,
+		MaxUnzipSize:     c.MaxUnzipSize,
+		MaxUnzipXMLSize:  c.MaxUnzipXMLSize,
+		MaxErrors:        c.MaxErrors,
 	}
 
 	return clone

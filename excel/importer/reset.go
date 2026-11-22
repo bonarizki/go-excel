@@ -19,6 +19,7 @@ func (i *BasicImporter) resetRunState() {
 	i.rows = make([][]any, 0)
 	i.headings = make([]string, 0)
 	i.errors = make([]error, 0)
+	i.errorCount = 0
 	i.currentRow = 0
 	i.totalRows = 0
 }

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/bonarizki/go-excel/excel"
-	"github.com/xuri/excelize/v2"
+	"github.com/bonarizki/go-excel/internal/xlsxopen"
 )
 
 // ImportFromReader and the XLSX reader path.
@@ -83,7 +83,7 @@ func (i *BasicImporter) ImportFromReader(ctx context.Context, r io.Reader) error
 // failures are returned as-is, an *excel.ImportError; a failure from
 // Import() itself is wrapped with "import failed: %w".
 func (i *BasicImporter) importXLSXFromReader(ctx context.Context, r io.Reader) error {
-	file, err := excelize.OpenReader(r)
+	file, err := xlsxopen.Reader(r, i.config.MaxUnzipSize, i.config.MaxUnzipXMLSize)
 	if err != nil {
 		if i.config.Logger != nil {
 			i.config.Logger.Error("Failed to open reader", "error", err)
