@@ -176,6 +176,8 @@ var knownConfigFields = map[string]bool{
 	"MaxUnzipSize":    true,
 	"MaxUnzipXMLSize": true,
 	"MaxErrors":       true,
+	"DateLayouts":     true,
+	"TimeLocation":    true,
 }
 
 // TestConfigClone_NoFieldForgotten cross-checks Config's actual field

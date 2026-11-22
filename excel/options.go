@@ -122,6 +122,24 @@ func WithMaxErrors(n int) Option {
 	}
 }
 
+// WithDateLayouts sets the layouts tried, in order, when importing into
+// time.Time fields, replacing DefaultDateLayouts. For day-first files:
+//
+//	excel.WithDateLayouts("02-01-2006", "02/01/2006", "2006-01-02")
+func WithDateLayouts(layouts ...string) Option {
+	return func(c *config.Config) {
+		c.DateLayouts = append([]string(nil), layouts...)
+	}
+}
+
+// WithTimeLocation sets the zone applied to date layouts that carry no
+// zone of their own. Defaults to UTC.
+func WithTimeLocation(loc *time.Location) Option {
+	return func(c *config.Config) {
+		c.TimeLocation = loc
+	}
+}
+
 // WithTimeout sets the maximum duration for the operation
 // If timeout is 0, no timeout is enforced.
 func WithTimeout(timeout time.Duration) Option {

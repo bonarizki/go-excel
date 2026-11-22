@@ -6,13 +6,29 @@ import (
 	"regexp"
 	"strings"
 	"sync"
+	"time"
 )
 
 // RowMapper handles mapping of row data to struct fields.
 type RowMapper struct {
 	headerMap  map[string]int       // Maps column name to column index (0-based)
 	validate   bool                 // If true, enforce min/max/pattern tag constraints
-	converters map[string]Converter // Per-column overrides for the default ConvertToType conversion
+	converters map[string]Converter // Per-column overrides for the default conversion
+
+	dateLayouts []string       // Layouts for time.Time fields; nil means DefaultDateLayouts
+	location    *time.Location // Zone for layouts without one; nil means UTC
+}
+
+// SetDateLayouts sets the layouts tried, in order, for time.Time fields.
+// nil restores DefaultDateLayouts.
+func (m *RowMapper) SetDateLayouts(layouts []string) {
+	m.dateLayouts = layouts
+}
+
+// SetTimeLocation sets the zone used for date layouts that carry no zone
+// of their own. nil means UTC.
+func (m *RowMapper) SetTimeLocation(loc *time.Location) {
+	m.location = loc
 }
 
 // NewRowMapper creates a new RowMapper with the given header row.
@@ -111,7 +127,7 @@ func (m *RowMapper) mapField(row []any, elem reflect.Value, tag *TagOptions) err
 	// Convert into a scratch value so a value that later fails
 	// validation never reaches dest.
 	scratch := reflect.New(field.Type()).Elem()
-	converted, err := convertInto(scratch, strVal, m.converters[tag.Name])
+	converted, err := m.convertInto(scratch, strVal, m.converters[tag.Name])
 	if err != nil {
 		return NewValidationError(0, tag.Name, strVal, fmt.Sprintf("failed to convert field %s: %v", tag.Name, err), err)
 	}

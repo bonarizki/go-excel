@@ -95,6 +95,8 @@ func (c *Config) Clone() *Config {
 		MaxUnzipSize:     c.MaxUnzipSize,
 		MaxUnzipXMLSize:  c.MaxUnzipXMLSize,
 		MaxErrors:        c.MaxErrors,
+		DateLayouts:      append([]string(nil), c.DateLayouts...),
+		TimeLocation:     c.TimeLocation,
 	}
 
 	return clone

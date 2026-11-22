@@ -20,7 +20,7 @@ var (
 // encoding.TextUnmarshaler and sql.Scanner implementations all work. It
 // returns the value that was stored (dereferenced for pointers) so callers
 // can run min/max validation against it.
-func convertInto(field reflect.Value, raw string, custom Converter) (any, error) {
+func (m *RowMapper) convertInto(field reflect.Value, raw string, custom Converter) (any, error) {
 	if custom != nil {
 		return assignCustom(field, raw, custom)
 	}
@@ -29,7 +29,7 @@ func convertInto(field reflect.Value, raw string, custom Converter) (any, error)
 	ft := field.Type()
 
 	if ft == timeType {
-		t, err := convertToTime(s)
+		t, err := parseTime(s, m.dateLayouts, m.location)
 		if err != nil {
 			return nil, err
 		}
@@ -43,7 +43,7 @@ func convertInto(field reflect.Value, raw string, custom Converter) (any, error)
 			return nil, nil
 		}
 		ptr := reflect.New(ft.Elem())
-		converted, err := convertInto(ptr.Elem(), s, nil)
+		converted, err := m.convertInto(ptr.Elem(), s, nil)
 		if err != nil {
 			return nil, err
 		}

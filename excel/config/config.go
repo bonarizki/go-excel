@@ -218,6 +218,18 @@ type Config struct {
 	// counted by ErrorCount. 0 means unlimited.
 	// Default: 1000
 	MaxErrors int
+
+	// DateLayouts are the time layouts tried, in order, when importing
+	// into a time.Time field. Excel serial numbers are accepted as a
+	// fallback. nil uses excel.DefaultDateLayouts, which contains no
+	// day-first layouts.
+	// Default: nil
+	DateLayouts []string
+
+	// TimeLocation is the zone applied to DateLayouts that carry no zone
+	// of their own.
+	// Default: nil (UTC)
+	TimeLocation *time.Location
 }
 
 // DefaultConfig returns a Config with sensible default values

@@ -35,9 +35,12 @@ func ImportToStructs[T any](ctx context.Context, filename string, opts ...Option
 		return nil, excel.NewConfigError("headers", nil, "no headers found in file")
 	}
 
+	cfg := imp.GetConfig()
 	mapper := excel.NewRowMapper(headers)
-	mapper.EnableValidation(imp.GetConfig().ValidateData)
-	mapper.SetConverters(imp.GetConfig().Converters)
+	mapper.EnableValidation(cfg.ValidateData)
+	mapper.SetConverters(cfg.Converters)
+	mapper.SetDateLayouts(cfg.DateLayouts)
+	mapper.SetTimeLocation(cfg.TimeLocation)
 
 	var results []T
 
