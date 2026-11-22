@@ -10,6 +10,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/bonarizki/go-excel/internal/cellvalue"
 )
 
 // FormatValue renders v as the string that will be written to a CSV
@@ -23,6 +25,7 @@ import (
 // opening the CSV would otherwise show exponent notation where the
 // source data had a plain number.
 func FormatValue(v any, timeLayout string, escapeFormulas bool) string { //nolint:gocyclo // flat type switch over primitive kinds, not meaningfully complex
+	v = cellvalue.Normalize(v)
 	if v == nil {
 		return ""
 	}

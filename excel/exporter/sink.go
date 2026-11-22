@@ -161,6 +161,7 @@ func (s *xlsxSink) WriteRow(ctx context.Context, rowNum int, row []any, isHeader
 // annotate errors.
 func (s *xlsxSink) writeCellValues(rowNum, physicalRow int, row []any) error {
 	for colNum, value := range row {
+		value = excel.NormalizeCell(value)
 		cell, err := excelize.CoordinatesToCellName(colNum+1+s.colOffset, physicalRow)
 		if err != nil {
 			return excel.NewExportError("CoordinatesToCellName", s.sheetName, rowNum, colNum+1, err)
