@@ -23,4 +23,4 @@ require (
 	golang.org/x/text v0.43.0 // indirect
 )
 
-retract v0.3.0 // wrong module path; use v0.3.1+
+retract v0.3.0 // wrong module path (github.com/bonarizki-dat/go-excel); use v0.4.0+

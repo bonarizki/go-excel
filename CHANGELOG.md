@@ -16,7 +16,9 @@ Work that is planned but not started is not listed here; see
 
 ## [Unreleased]
 
-Correctness and untrusted-input hardening ahead of `0.4.0`. Several
+## [0.4.0] - 2026-11-23
+
+Correctness and untrusted-input hardening. Several
 fixes change observable behavior; they are listed first.
 
 ### Breaking Changes
@@ -72,6 +74,10 @@ fixes change observable behavior; they are listed first.
 - Tag `pattern:` values may contain commas.
 
 ## [0.3.0] - 2026-08-23
+
+> **Do not use.** The `v0.3.0` tag declares the old module path
+> `github.com/bonarizki-dat/go-excel`, so `go get github.com/bonarizki/go-excel@v0.3.0`
+> fails. It is retracted; use `v0.4.0` or later.
 
 This release closes out the harden pass tracked in
 [docs/planning](docs/planning): documentation claims corrected to match
@@ -890,7 +896,8 @@ than in two places that could drift apart.
 Development-log marker for the initial repository setup and architecture
 design. No `v0.0.0` tag exists in git.
 
-[Unreleased]: https://github.com/bonarizki/go-excel/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/bonarizki/go-excel/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/bonarizki/go-excel/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/bonarizki/go-excel/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/bonarizki/go-excel/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/bonarizki/go-excel/releases/tag/v0.1.0

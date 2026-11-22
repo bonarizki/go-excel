@@ -2,8 +2,8 @@
 
 > Complete API documentation for go-excel (`github.com/bonarizki/go-excel`)
 
-**Covers**: `v0.3.0` (see [CHANGELOG.md](../CHANGELOG.md))
-**Last audited against real signatures**: 2026-08-23
+**Covers**: `v0.4.0` (see [CHANGELOG.md](../CHANGELOG.md))
+**Last audited against real signatures**: 2026-11-23
 
 ---
 
