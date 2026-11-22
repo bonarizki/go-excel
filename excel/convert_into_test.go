@@ -13,7 +13,7 @@ type status int
 
 type upperText string
 
-func (u *upperText) UnmarshalText(b []byte) error {
+func (u *upperText) UnmarshalText(b []byte) error { //nolint:unparam // signature fixed by encoding.TextUnmarshaler
 	*u = upperText(strings.ToUpper(string(b)))
 	return nil
 }

@@ -14,8 +14,8 @@ import (
 // Pool stats alone cannot detect this: abandoned tasks are counted as
 // TasksFailed, so Submitted == Completed + Failed still holds.
 func TestFinishDispatch_ReportsRowsWithoutResults(t *testing.T) {
-	pool := concurrency.NewWorkerPool(1, func(context.Context, concurrency.Task) (any, error) {
-		return nil, nil
+	pool := concurrency.NewWorkerPool(1, func(_ context.Context, task concurrency.Task) (any, error) {
+		return task.ID, nil
 	})
 	si := &StreamImporter{workerPool: pool}
 

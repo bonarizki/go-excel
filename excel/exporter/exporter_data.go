@@ -86,6 +86,36 @@ func (e *BasicExporter) convertSliceToRows(slice []any) ([][]any, error) {
 	return rows, nil
 }
 
+// reflectSliceRows turns each element of a slice or array into a row. For
+// struct elements the heading row comes from the excel tags, not from the
+// first record, which would otherwise be consumed as the header by
+// exportRows.
+func (e *BasicExporter) reflectSliceRows(val reflect.Value) ([][]any, error) {
+	var rows [][]any
+	if e.config.PreallocateRows && val.Len() > 0 {
+		rows = make([][]any, 0, val.Len()+1)
+	}
+
+	if e.config.WithHeadings {
+		header, ok, err := structHeaderRow(val.Type().Elem())
+		if err != nil {
+			return nil, err
+		}
+		if ok {
+			rows = append(rows, header)
+		}
+	}
+
+	for i := 0; i < val.Len(); i++ {
+		row, err := e.reflectStructToRow(val.Index(i))
+		if err != nil {
+			return nil, err
+		}
+		rows = append(rows, row)
+	}
+	return rows, nil
+}
+
 // convertUsingReflection is the fallback for data types not explicitly
 // handled by prepareDataAtDepth: pointers are dereferenced, slices and
 // arrays become one row per element, structs become a single row, and
@@ -98,31 +128,7 @@ func (e *BasicExporter) convertUsingReflection(data any) ([][]any, error) {
 	}
 
 	if val.Kind() == reflect.Slice || val.Kind() == reflect.Array {
-		var rows [][]any
-		if e.config.PreallocateRows && val.Len() > 0 {
-			rows = make([][]any, 0, val.Len()+1)
-		}
-
-		// For struct elements the heading row comes from the excel tags,
-		// not from the first record, which would otherwise be consumed
-		// as the header by exportRows.
-		if e.config.WithHeadings {
-			if header, ok, err := structHeaderRow(val.Type().Elem()); err != nil {
-				return nil, err
-			} else if ok {
-				rows = append(rows, header)
-			}
-		}
-
-		for i := 0; i < val.Len(); i++ {
-			item := val.Index(i)
-			row, err := e.reflectStructToRow(item)
-			if err != nil {
-				return nil, err
-			}
-			rows = append(rows, row)
-		}
-		return rows, nil
+		return e.reflectSliceRows(val)
 	}
 
 	if val.Kind() == reflect.Struct {

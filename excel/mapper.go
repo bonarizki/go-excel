@@ -127,9 +127,13 @@ func (m *RowMapper) mapField(row []any, elem reflect.Value, tag *TagOptions) err
 	// Convert into a scratch value so a value that later fails
 	// validation never reaches dest.
 	scratch := reflect.New(field.Type()).Elem()
-	converted, err := m.convertInto(scratch, strVal, m.converters[tag.Name])
+	stored, err := m.convertInto(scratch, strVal, m.converters[tag.Name])
 	if err != nil {
 		return NewValidationError(0, tag.Name, strVal, fmt.Sprintf("failed to convert field %s: %v", tag.Name, err), err)
+	}
+	var converted any
+	if stored.IsValid() {
+		converted = stored.Interface()
 	}
 
 	if m.validate {

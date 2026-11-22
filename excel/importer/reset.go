@@ -2,15 +2,14 @@ package importer
 
 import "github.com/xuri/excelize/v2"
 
-// setFile replaces the importer's excelize file, closing the previous one
-// if this importer opened it. owned reports whether f must be closed by
-// this importer later.
-func (i *BasicImporter) setFile(f *excelize.File, owned bool) {
+// setFile replaces the importer's excelize file with one the importer
+// opened itself, closing the previous file if the importer owned it.
+func (i *BasicImporter) setFile(f *excelize.File) {
 	if i.shouldCloseFile && i.file != nil && i.file != f {
 		_ = i.file.Close()
 	}
 	i.file = f
-	i.shouldCloseFile = owned
+	i.shouldCloseFile = true
 }
 
 // resetRunState clears everything a previous import left behind so a

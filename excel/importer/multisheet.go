@@ -30,7 +30,7 @@ func (i *BasicImporter) ImportFromSheet(ctx context.Context, filename, sheetName
 		return nil, excel.NewImportError("OpenFile", sheetName, 0, 0, err)
 	}
 
-	i.setFile(file, true)
+	i.setFile(file)
 
 	sheetIndex, err := file.GetSheetIndex(sheetName)
 	if err != nil || sheetIndex < 0 {
@@ -81,7 +81,7 @@ func (i *BasicImporter) ImportAllSheets(ctx context.Context, filename string) (m
 		return nil, excel.NewImportError("OpenFile", "", 0, 0, err)
 	}
 
-	i.setFile(file, true)
+	i.setFile(file)
 
 	sheetList := file.GetSheetList()
 	if len(sheetList) == 0 {

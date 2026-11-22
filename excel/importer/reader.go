@@ -91,7 +91,7 @@ func (i *BasicImporter) importXLSXFile(ctx context.Context, filename string) err
 		return excel.NewImportError("OpenFile", i.config.SheetName, 0, 0, err)
 	}
 
-	i.setFile(file, true)
+	i.setFile(file)
 	i.format = excel.FileFormatXLSX
 
 	if err := i.Import(ctx); err != nil {
