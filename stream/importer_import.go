@@ -177,5 +177,11 @@ func (si *StreamImporter) finishDispatch(workerErrChan <-chan error, drainerDone
 	if readerErr != nil {
 		return fmt.Errorf("read rows: %w", readerErr)
 	}
+
+	stats := si.workerPool.Stats()
+	pending := stats.TasksSubmitted - stats.TasksCompleted - stats.TasksFailed
+	if pending > 0 {
+		return fmt.Errorf("import incomplete: %d row(s) not processed", pending)
+	}
 	return nil
 }

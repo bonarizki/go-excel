@@ -57,6 +57,10 @@ type CSVOptions struct {
 	// formula metacharacters so spreadsheet apps do not execute user data.
 	// Default: true.
 	EscapeFormulas bool
+
+	// LazyQuotes allows bare quotes in CSV fields when true
+	// (encoding/csv.LazyQuotes). Default: false.
+	LazyQuotes bool
 }
 
 // DefaultCSVOptions returns the CSVOptions used when a Config has not

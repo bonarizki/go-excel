@@ -277,6 +277,13 @@ func WithCSVFormulaEscaping(enabled bool) Option {
 	}
 }
 
+// WithCSVLazyQuotes enables bare-quote tolerance when reading CSV.
+func WithCSVLazyQuotes(enabled bool) Option {
+	return func(c *config.Config) {
+		c.CSV.LazyQuotes = enabled
+	}
+}
+
 // WithStrictFormat controls whether exporting to CSV with an XLSX-only
 // feature configured (styles, column widths, a custom start cell,
 // auto-sized columns, document properties, or more than one sheet
