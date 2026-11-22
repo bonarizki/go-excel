@@ -68,13 +68,24 @@ func TestImporter_NoTimeout_NoContextDeadline(t *testing.T) {
 	}
 }
 
-// TestImporter_Timeout_Expires verifies that an already-expired timeout
+// TestImporter_Timeout_Expires verifies that an elapsed WithTimeout
 // causes Import to fail with a context error rather than succeeding.
+//
+// The timeout is applied when Import starts (not at construction), so a
+// pre-Import sleep cannot expire it. Waiting on ctx.Done() inside
+// BeforeImport is deterministic on Windows, where a 1ns timer often does
+// not fire before a tiny in-memory import finishes.
 func TestImporter_Timeout_Expires(t *testing.T) {
-	imp := NewImporterWithFile(newSingleCellFile(t), excel.WithTimeout(1*time.Nanosecond), excel.WithHeadings(false))
+	imp := NewImporterWithFile(newSingleCellFile(t), excel.WithTimeout(10*time.Millisecond), excel.WithHeadings(false))
 
-	// Give the 1ns timeout time to elapse before Import even starts.
-	time.Sleep(time.Millisecond)
+	imp.On(excel.BeforeImport, func(ctx context.Context, _ *excel.Event) error {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-time.After(200 * time.Millisecond):
+			return nil
+		}
+	})
 
 	err := imp.Import(context.Background())
 	if err == nil {
