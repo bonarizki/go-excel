@@ -26,9 +26,7 @@ type TagOptions struct {
 }
 
 // tagCache stores parsed tag options for struct fields to avoid repeated parsing.
-// The key is the reflect.Type's string representation, unique per type
-// even for two distinct anonymous struct types that would otherwise
-// share an empty package path and name.
+// Keys are reflect.Type values so distinct types in different packages cannot collide.
 var tagCache = sync.Map{}
 
 // maxEmbeddedFieldDepth bounds how many levels of anonymous
@@ -59,8 +57,8 @@ func ParseTag(tag string, fieldIndex []int) (TagOptions, error) {
 		options.Name = strings.TrimSpace(parts[0])
 	}
 
-	for _, part := range parts[1:] {
-		part = strings.TrimSpace(part)
+	for i := 1; i < len(parts); i++ {
+		part := strings.TrimSpace(parts[i])
 		switch {
 		case part == "required":
 			options.Required = true
@@ -81,7 +79,12 @@ func ParseTag(tag string, fieldIndex []int) (TagOptions, error) {
 			}
 			options.Max = &val
 		case strings.HasPrefix(part, "pattern:"):
-			options.Pattern = strings.TrimPrefix(part, "pattern:")
+			pattern := strings.TrimPrefix(part, "pattern:")
+			if i+1 < len(parts) {
+				pattern = strings.TrimPrefix(strings.Join(parts[i:], ","), "pattern:")
+			}
+			options.Pattern = pattern
+			i = len(parts)
 		}
 	}
 
@@ -103,8 +106,7 @@ func GetFieldTags(t reflect.Type) ([]TagOptions, error) {
 		return nil, NewConfigError("type", t.String(), "GetFieldTags requires a struct type")
 	}
 
-	cacheKey := t.String()
-	if cached, ok := tagCache.Load(cacheKey); ok {
+	if cached, ok := tagCache.Load(t); ok {
 		return cached.([]TagOptions), nil
 	}
 
@@ -113,7 +115,7 @@ func GetFieldTags(t reflect.Type) ([]TagOptions, error) {
 		return nil, err
 	}
 
-	tagCache.Store(cacheKey, tags)
+	tagCache.Store(t, tags)
 	return tags, nil
 }
 
